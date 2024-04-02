@@ -39,6 +39,11 @@
 		      	v-bind:description="dish.description"
 		      	v-bind:price="dish.price"
 		      	v-bind:image="dish.image"
+            v-bind:newCode="dish.newcode"
+            v-bind:categoryName="dish.categoryname"
+            v-bind:newSpec="dish.newspec"
+            v-bind:newUnit="dish.newunit"
+            v-bind:newStatus="dish.newstatus"
 		      	v-on:remove="DeleteDish(dish.food_id)"
 		      	style="width:90%">
 		    </Dish>
@@ -127,6 +132,11 @@
 									description:_this.newdes,
 									price:_this.newprice,
 									image:_this.newimage,
+                  newCode:_this.newcode,
+                  categoryName:_this.categoryname,
+                  newSpec:_this.newspec,
+                  newUnit:_this.newunit,
+                  newStatus:_this.newstatus,
 									priority:1
 								})
 								.then(function(response) {
@@ -154,6 +164,11 @@
 				this.newdes = data.EditedDescription;
 				this.newprice = data.EditedPrice;
 				this.newimage = data.EditedImage;
+        this.newcode = data.EditedCode;
+        this.categoryname = data.EditedCategory;
+        this.newspec = data.EditedNewSpec;
+        this.newunit = data.EditedNewUnit;
+        this.newstatus = data.EditedNewStatus
 			},
 			RefreshList(page) {
 
@@ -237,9 +252,7 @@
 		mounted: function() {
 			this.$nextTick(function () {
 
-
-
- 				this.RefreshList(1);
+				this.RefreshList(1);
       		})
 
 

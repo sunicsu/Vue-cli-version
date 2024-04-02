@@ -43,33 +43,33 @@ option {
       <div>
         <p style="float: left">选择分类</p>
         <br></br>
-        <select class="select" v-model="selectedOption">
+        <select class="select" v-model="selectedCategoryName">
           <option value="" disabled >请选择一个选项</option>
           <option v-for="option in options" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-            {{ options.text }}
+            {{ option.text }}
           </option>
         </select>
       </div>
       <p style="float: left">规格</p>
       <br></br>
-      <select class="select" v-model="selectedOption1">
+      <select class="select" v-model="selectedNewSpec">
         <option disabled value="">请选择规格</option>
         <option v-for="option in options1" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-          {{ options1.text }}
+          {{ option.text }}
         </option>
       </select>
       <p>份数</p>
-      <select class="select" v-model="selectedOption2">
+      <select class="select" v-model="selectedNewUnit">
         <option disabled value="">请选择可点份数</option>
         <option v-for="option in options2" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-          {{ options2.text }}
+          {{ option.text }}
         </option>
       </select>
       <p>状态</p>
-      <select class="select" v-model="selectedOption3">
+      <select class="select" v-model="selectedNewStatus">
         <option  disabled value="">请选择状态</option>
         <option  v-for="option in options3" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-          {{ options3.text }}
+          {{ option.text }}
         </option>
       </select>
     </Col>
@@ -117,27 +117,27 @@ option {
         srcdishcode:'',
 				srcdescription:'',
 				srcdishprice:'',
-        selectedOption: '',
-        selectedOption1: '',
-        selectedOption2: '',
-        selectedOption3: '',
+        selectedCategoryName: '',
+        selectedNewSpec: '',
+        selectedNewUnit: '',
+        selectedNewStatus: '',
         options: [
-          { text: '涮品', value: 'option1' },
-          { text: '肉类', value: 'option2' },
-          { text: '蔬菜', value: 'option3' }
+          { text: '涮品', value: '涮品' },
+          { text: '肉类', value: '肉类' },
+          { text: '蔬菜', value: '蔬菜' }
         ],
         options1: [
-          { text: '大盘', value: 'option1' },
-          { text: '中盘', value: 'option2' },
-          { text: '小盘', value: 'option3' }
+          { text: '大盘', value: '大盘' },
+          { text: '中盘', value: '中盘' },
+          { text: '小盘', value: '小盘' }
         ],
         options2: [
-          { text: '0.5', value: 'option1' },
-          { text: '1', value: 'option2' }
+          { text: '0.5', value: '0.5' },
+          { text: '1', value: '1' }
         ],
         options3: [
-          { text: '新品', value: 'option1' },
-          { text: '热销', value: 'option2' }
+          { text: '新品', value: '新品' },
+          { text: '热销', value: '热销' }
         ]
 			}
 		},
@@ -149,10 +149,10 @@ option {
 					EditedPrice: this.srcdishprice,
 					EditedImage: this.image_url,
           EditedCode: this.srcdishcode,
-          EditedOption: this.selectedOption,
-          EditedOption1: this.selectedOption1,
-          EditedOption2: this.selectedOption2,
-          EditedOption3: this.selectedOption3
+          EditedCategory: this.selectedCategoryName,
+          EditedNewSpec: this.selectedNewSpec,
+          EditedNewUnit: this.selectedNewUnit,
+          EditedNewStatus: this.selectedNewStatus
 				};
 				this.$emit('AddNewDish', data);
 			},
@@ -172,10 +172,10 @@ option {
 				this.srcdescription='';
 				this.srcdishname='';
         this.srcdishcode="";
-        this.selectedOption='';
-        this.selectedOption1='';
-        this.selectedOption2='';
-        this.selectedOption3='';
+        this.selectedCategoryName='';
+        this.selectedNewSpec='';
+        this.selectedNewUnit='';
+        this.selectedNewStatus='';
 
 			}
 		}
