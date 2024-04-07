@@ -7,6 +7,7 @@
   	<Card>
       <div style="height: 1000px">
       	<h2>餐厅信息</h2>
+        <h3>六和居川味火锅店</h3>
       </div>
   	</Card>
   </Content>

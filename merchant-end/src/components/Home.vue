@@ -37,7 +37,7 @@
         <Layout :style="{minHeight: '100vh'}">
             <Sider>
                 <div id="logo" style="width: auto; height: 64px;">
-                    <img src="../assets/MerchantLogo3.png" alt="logo" style="height:100%;width:100%;">
+                    <img src="../assets/logo.png" alt="logo" style="height:70%;width:70%;">
                 </div>
                 <Menu active-name="1-1" theme="dark" width="auto" :open-names="['1']">
                     <Submenu name="1">

@@ -32,26 +32,25 @@
 				<h2 slot="header">添加菜品</h2>
 				<Addwindow v-on:AddNewDish="Refresh" ref="addwin"></Addwindow>
 			</Modal>
-		    <Dish v-for="dish in dishes"
-		      	v-bind:key="dish.food_id"
-		      	v-bind:dishid="dish.food_id"
-		      	v-bind:dishname="dish.food_name"
-		      	v-bind:description="dish.description"
-		      	v-bind:price="dish.price"
-		      	v-bind:image="dish.image"
-            v-bind:newCode="dish.newcode"
-            v-bind:categoryName="dish.categoryname"
-            v-bind:newSpec="dish.newspec"
-            v-bind:newUnit="dish.newunit"
-            v-bind:newStatus="dish.newstatus"
-		      	v-on:remove="DeleteDish(dish.food_id)"
-		      	style="width:90%">
-		    </Dish>
+      <Dish v-for="dish in dishes"
+          v-bind:key="dish.food_id"
+          v-bind:dishid="dish.food_id"
+          v-bind:dishname="dish.food_name"
+          v-bind:description="dish.description"
+          v-bind:price="dish.price"
+          v-bind:image="dish.image"
+          v-bind:newCode="dish.newcode"
+          v-bind:categoryName="dish.categoryname"
+          v-bind:newSpec="dish.newspec"
+          v-bind:newunit="dish.newunit"
+          v-bind:newStatus="dish.newstatus"
+          v-on:remove="DeleteDish(dish.food_id)"
+          style="width:90%">
+      </Dish>
       	</div>
-      	<div id="pages">
-
-			<Page :total="100" show-elevator show-sizer @on-change="ChangePage"></Page>
-		</div>
+      <div id="pages">
+        <Page :total="100" show-elevator show-sizer @on-change="ChangePage"></Page>
+      </div>
   	</Card>
   </Content>
 </template>
@@ -249,13 +248,12 @@
 
 			}
 		},
+
 		mounted: function() {
 			this.$nextTick(function () {
 
 				this.RefreshList(1);
       		})
-
-
-		}
+    }
 	}
 </script>
