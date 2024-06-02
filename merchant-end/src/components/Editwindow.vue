@@ -23,7 +23,7 @@
 		<Row span="24">
 		<Col span="8">
 			<div id="photo">
-				<img :src="srcimage" style="height:100%;width:100%;">
+				<img :src="newEditedImage" style="height:100%;width:100%;">
 			</div>
 			<br/><br/>
 			<Upload action="/api/upload_image" style="float:right; margin-right:24px;" :on-success="handleSuccess" name="image" ref="upload" :before-upload="reset">
@@ -37,32 +37,32 @@
       <div>
         <p style="float: left">选择分类</p>
         <br></br>
-        <select class="select" v-model="getSelectedCategoryName">
+        <select class="select" v-model="newEditedCategory">
           <option disabled value="" >请选择一个选项</option>
-          <option v-for="option in options" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
+          <option v-for="option in options" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData" >
             {{ option.text }}
           </option>
         </select>
       </div>
       <p style="float: left">规格</p>
       <br></br>
-      <select class="select" v-model="getSelectedNewSpec">
+      <select class="select" v-model="newEditedNewSpec">
         <option disabled value="">请选择规格</option>
         <option v-for="option in options1" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
           {{ option.text }}
         </option>
       </select>
       <p>份数</p>
-      <select class="select" v-model="getSelectedNewUnit">
+      <select class="select" v-model="newEditedNewUnit">
         <option disabled value="">请选择可点份数</option>
-        <option v-for="option in options2" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
+        <option v-for="option in options2" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData" >
           {{ option.text }}
         </option>
       </select>
       <p>状态</p>
-      <select class="select" v-model="getSelectedNewStatus">
+      <select class="select" v-model="newEditedNewStatus">
         <option  disabled value="">请选择状态</option>
-        <option  v-for="option in options3" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
+        <option  v-for="option in options3" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData" >
           {{ option.text }}
         </option>
       </select>
@@ -72,26 +72,26 @@
         <p style="float: left">菜品名称</p>
         <br></br>
         <Tooltip content="菜品名称不能包含中文字符" placement="right-start">
-          <Input class="Input" placeholder="请输入菜名..." :autofocus="true" @on-change="DeliverData" v-model="srcdishname"></Input>
+          <Input class="Input" placeholder="请输入菜名..." :autofocus="true" @on-change="DeliverData" v-model="newEditedName"></Input>
         </Tooltip>
       </div>
       <div>
         <p>菜名编码</p>
         <Tooltip content="请输入数字" placement="right-start">
-          <Input class="Input" placeholder="请输入菜品定价..." :autofocus="true" @on-change="DeliverData" v-model="srcdishcode"></Input>
+          <Input class="Input" placeholder="请输入菜品定价..." :autofocus="true" @on-change="DeliverData" v-model="newEditedCode"></Input>
         </Tooltip>
       </div>
       <div>
         <p>单价</p>
         <Tooltip content="请输入数字" placement="right-start">
-          <Input class="Input" placeholder="请输入菜品定价..." :autofocus="true" @on-change="DeliverData" v-model="srcdishprice"></Input>
+          <Input class="Input" placeholder="请输入菜品定价..." :autofocus="true" @on-change="DeliverData" v-model="newEditedPrice"></Input>
         </Tooltip>
       </div>
       <div>
         <p style="float: left">菜品描述</p>
         <br></br>
         <Tooltip content="菜品描述不能包含中文字符" placement="right-start">
-          <Input placeholder="请输入菜品简短描述..." :autofocus="true" @on-change="DeliverData" v-model="srcdescription" type="textarea" class="textarea-style"></Input>
+          <Input placeholder="请输入菜品简短描述..." :autofocus="true" @on-change="DeliverData" v-model="newEditedDescription" type="textarea" class="textarea-style"></Input>
         </Tooltip>
       </div>
     </Col>
@@ -121,21 +121,32 @@
 		data() {
 			return {
 				upload_finished:false,
-        srcdishname:'',
-        srcdishcode:'',
-        srcdescription:'',
-        srcdishprice:'',
-        // selectedCategoryName: '',
-        // selectedNewSpec: '',
-        // selectedNewUnit: '',
-        // selectedNewStatus: '',
+        // srcdishname:'',
+        // srcdishcode:'',
+        // srcdescription:'',
+        // srcdishprice:'',
+        // getSelectedCategoryName: '',
+        // getSelectedNewSpec: '',
+        // getSelectedNewUnit: '',
+        // getSelectedNewStatus: '',
+        newEditedName: this.srcdishname,
+        newEditedDescription: this.srcdescription,
+        newEditedPrice: this.srcdishprice,
+        newEditedImage: this.srcimage,
+        newEditedCode: this.srcdishcode,
+        newEditedCategory: '',
+        newEditedNewSpec: this.getSelectedNewSpec,
+        newEditedNewUnit: this.getSelectedNewUnit,
+        newEditedNewStatus: this.getSelectedNewStatus,
         options: [
           { text: '肉类', value: "1" },
-          { text: '涮品', value: "2" },
-          { text: '蔬菜', value: "3" },
+          { text: '蔬菜', value: "2" },
+          { text: '涮品', value: "3" },
           { text: '菌菇', value: "4" },
           { text: '海鲜', value: "5" },
-          { text: '主食', value: "6" }
+          { text: '锅底', value: "6" },
+          { text: '主食', value: "7" },
+          { text: '特色锅', value: "8" }
         ],
         options1: [
           { text: '大盘', value: '大盘' },
@@ -156,10 +167,15 @@
 		methods: {
 			DeliverData() {
 				let data = {
-					EditedName: this.srcdishname,
-					EditedDescription: this.srcdescription,
-					EditedPrice: this.srcdishprice,
-					EditedImage: this.srcimage
+					EditedName: this.newEditedName,
+					EditedDescription: this.newEditedDescription,
+					EditedPrice: this.newEditedPrice,
+					EditedImage: this.newEditedImage,
+          EditedCode: this.newEditedCode,
+          EditedCategory: this.newEditedCategory,
+          EditedNewSpec: this.newEditedNewSpec,
+          EditedNewUnit: this.newEditedNewUnit,
+          EditedNewStatus: this.newEditedNewStatus
 				};
 				this.$emit('UpdateDish', data);
 			},

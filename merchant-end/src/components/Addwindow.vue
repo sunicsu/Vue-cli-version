@@ -123,11 +123,13 @@ option {
         selectedNewStatus: '',
         options: [
           { text: '肉类', value: "1" },
-          { text: '涮品', value: "2" },
-          { text: '蔬菜', value: "3" },
+          { text: '蔬菜', value: "2" },
+          { text: '涮品', value: "3" },
           { text: '菌菇', value: "4" },
           { text: '海鲜', value: "5" },
-          { text: '主食', value: "6" }
+          { text: '锅底', value: "6" },
+          { text: '主食', value: "7" },
+          { text: '特色锅', value: "8" }
         ],
         options1: [
           { text: '大盘', value: '大盘' },

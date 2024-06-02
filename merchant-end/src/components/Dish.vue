@@ -95,6 +95,7 @@
 
 <script>
   // let getSelectedCategoryName = ''
+  //引入子组件
 	import Editwindow from '@/components/Editwindow'
 	export default {
 		data() {
@@ -105,7 +106,11 @@
 				tempdescription: '',
 				tempprice: '',
 				tempimage: '',
-
+        tempCode: '',
+        tempCategoryName: '',
+        tempNewSpec: '',
+        tempNewUnit: '',
+        tempNewStatus: '',
 				change: false
 			}
 		},
@@ -141,7 +146,42 @@
 							content: '请上传菜品图片'
 						});
 
-					} else {
+          } else if (this.tempCode=='') {
+
+            this.$Modal.warning({
+              title: '菜品编码不能为空',
+              content: '请填写编码，类别首字全拼加数字，且首字母大写，数字为该类菜品所加的第几个，如Rou1'
+            });
+
+          } else if (this.tempCategoryName=='') {
+
+            this.$Modal.warning({
+              title: '菜品类别不能为空',
+              content: '请选择类别'
+            });
+
+          } else if (this.tempNewSpec=='') {
+
+            this.$Modal.warning({
+              title: '菜品规格不能为空',
+              content: '请选择规格'
+            });
+
+          } else if (this.tempNewUnit=='') {
+
+            this.$Modal.warning({
+              title: '份数不能为空',
+              content: '请选择份数'
+            });
+
+          } else if (this.tempNewStatus=='') {
+
+            this.$Modal.warning({
+              title: '状态不能为空',
+              content: '请选择状态'
+            });
+
+          } else {
 						this.$Modal.confirm({
 						title:'确认修改',
 						content:'确认对菜品信息进行修改？',
@@ -154,7 +194,13 @@
 								description: _this.tempdescription,
 								price:_this.tempprice,
 								image:_this.tempimage,
-								priority:1
+                newSpec:_this.tempNewSpec,
+                categoryName:_this.tempCategoryName,
+                newStatus:_this.tempNewStatus,
+                newUnit:_this.tempNewUnit,
+                newCode:_this.tempCode,
+								priority:1,
+
 							})
 							.then(function(response) {
 								_this.$Modal.remove();
@@ -164,7 +210,11 @@
 								_this.description = _this.tempdescription;
 								_this.price = _this.tempprice;
 								_this.image = _this.tempimage;
-
+                _this.newSpec = _this.tempNewSpec;
+                _this.categoryName = _this.tempCategoryName;
+                _this.newStatus = _this.tempNewStatus;
+                _this.newUnit = _this.tempNewUnit;
+                _this.newCode = _this.tempCode;
 							})
 							.catch(function(error) {
 								_this.$Modal.remove();
@@ -176,11 +226,6 @@
 						});
 					}
 
-
-
-
-
-
 				}
 				this.change = false;
 			},
@@ -191,7 +236,12 @@
 				this.tempname = data.EditedName;
 				this.tempdescription = data.EditedDescription;
 				this.tempprice = data.EditedPrice;
-				this.tempimage = data.EditedImage
+				this.tempimage = data.EditedImage;
+        this.tempCode = data.EditedCode;
+        this.tempCategoryName = data.EditedCategory;
+        this.tempNewSpec = data.EditedNewSpec;
+        this.tempNewUnit = data.EditedNewUnit;
+        this.tempNewStatus = data.EditedNewStatus;
 				this.change = true;
 			}
 		},

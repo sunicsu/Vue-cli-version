@@ -25,7 +25,7 @@
                         key: 'order_id'
                     },
                     {
-                        title: '桌号',
+                        title: '房间',
                         key: 'table_id'
                     },
                     {
@@ -38,7 +38,7 @@
                         render: (h, params) => {
                             let date = new Date(params.row.order_time);
                             let formatDate = `
-                                ${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} 
+                                ${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}
                                 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}
                             `
                             return h('span', formatDate)
@@ -89,7 +89,7 @@
                                         display: 'inline-block',
                                         padding: '0 12px'
                                     }
-                                }, 
+                                },
                                 '订单号：' + this.orderItems[index].order_id),
 
                                 h('p', {
@@ -97,16 +97,16 @@
                                         display: 'inline-block',
                                         padding: '0 12px'
                                     }
-                                }, 
-                                 '桌号：' + this.orderItems[index].table_id),
+                                },
+                                 '房间：' + this.orderItems[index].table_id),
 
                                 h('p', {
                                     style: {
                                         display: 'inline-block',
                                         padding: '0 12px'
                                     }
-                                }, 
-                                 '总价：' + this.orderItems[index].total_price)    
+                                },
+                                 '总价：' + this.orderItems[index].total_price)
                             ]),
                             h('Table', {
                                 props: {
@@ -155,7 +155,7 @@
                         } else {
                             console.log("获取订单失败")
                         }
-                        
+
                     })
                     .catch(err => {
                         console.log('err: ', err)
@@ -165,7 +165,7 @@
                     });
 
                 /* dangerous!! */
-                if (this.timeout) 
+                if (this.timeout)
                     setTimeout(this.updateData.bind(this), 10000);
             }
         },
@@ -177,7 +177,7 @@
         destroyed() {
             this.timeout = false;
         }
-        
+
     }
 </script>
 
@@ -193,11 +193,11 @@
         font-size: 14px;
         box-sizing: border-box;
     }
-    
+
     .table-wrapper {
         margin-top: 24px;
     }
-    
+
     .table-content {
         font-size: 20px;
     }

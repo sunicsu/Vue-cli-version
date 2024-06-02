@@ -169,14 +169,19 @@ webpackJsonp([1], {
             data: function () {
                 return {upload_finished: !1}
             },
-            props: ["srcdishname", "srcdescription", "srcdishprice", "srcimage"],
+            props: ["srcdishname", "srcdescription", "srcdishprice", "srcimage", 'srcdishcode', 'getSelectedCategoryName', 'getSelectedNewSpec', 'getSelectedNewUnit', 'getSelectedNewStatus'],
             methods: {
                 DeliverData: function () {
                     var t = {
                         EditedName: this.srcdishname,
                         EditedDescription: this.srcdescription,
                         EditedPrice: this.srcdishprice,
-                        EditedImage: this.srcimage
+                        EditedImage: this.srcimage,
+                        EditedCode: this.srcdishcode,
+                        EditedCategory: this.getSelectedCategoryName,
+                        EditedNewSpec: this.getSelectedNewSpec,
+                        EditedNewUnit: this.getSelectedNewUnit,
+                        EditedNewStatus: this.getSelectedNewStatus
                     };
                     this.$emit("UpdateDish", t)
                 }, handleSuccess: function (t, e) {
@@ -263,6 +268,11 @@ webpackJsonp([1], {
                     tempdescription: "",
                     tempprice: "",
                     tempimage: "",
+                    tempCode: '',
+                    tempCategoryName: '',
+                    tempNewSpec: '',
+                    tempNewUnit: '',
+                    tempNewStatus: '',
                     change: !1
                 }
             },
@@ -281,7 +291,23 @@ webpackJsonp([1], {
                     }) : "" == this.tempimage ? this.$Modal.warning({
                         title: "菜品图片不能为空",
                         content: "请上传菜品图片"
-                    }) : this.$Modal.confirm({
+                    }) : "" == this.tempCode ? this.$Modal.warning({
+                            title: "菜品编码不能为空",
+                            content: "请填写编码，类别首字全拼加数字，且首字母大写，数字为该类菜品所加的第几个，如Rou1"
+                    }) : "" == this.tempCategoryName ? this.$Modal.warning({
+                            title: "菜品类别不能为空",
+                            content: "请选择类别"
+                    }) : "" == this.tempNewSpec ? this.$Modal.warning({
+                            title: "菜品规格不能为空",
+                            content: "请选择规格"
+                    }) : "" == this.tempNewUnit ? this.$Modal.warning({
+                            title: "份数不能为空",
+                            content: "请选择份数"
+                    }) : "" == this.tempNewStatus ? this.$Modal.warning({
+                            title: "状态不能为空",
+                            content: "请选择状态"
+                    })
+                        : this.$Modal.confirm({
                         title: "确认修改", content: "确认对菜品信息进行修改？", loading: !0, onOk: function () {
                             var e = t;
                             t.axios.put("api/food/4/" + t.dishid, {
@@ -289,6 +315,11 @@ webpackJsonp([1], {
                                 description: e.tempdescription,
                                 price: e.tempprice,
                                 image: e.tempimage,
+                                newSpec: e.tempNewSpec,
+                                categoryName: e.tempCategoryName,
+                                newStatus: e.tempNewStatus,
+                                newunit: e.tempNewUnit,
+                                newCode: e.tempCode,
                                 priority: 1
                             }).then(function (t) {
                                 e.$Modal.remove(), e.$Message.success("修改成功！"), console.log(t), e.dishname = e.tempname, e.description = e.tempdescription, e.price = e.tempprice, e.image = e.tempimage
@@ -352,7 +383,12 @@ webpackJsonp([1], {
                         srcdescription: this.description,
                         srcdishname: this.dishname,
                         srcimage: this.image,
-                        srcdishprice: this.price
+                        srcdishprice: this.price,
+                        srcdishcode: this.newCode,
+                        getSelectedCategoryName: this.categoryName,
+                        getSelectedNewSpec: this.newSpec,
+                        getSelectedNewUnit: this.newUnit,
+                        getSelectedNewStatus: this.newStatus,
                     },
                     on: {UpdateDish: t.Refresh}
                 })], 1), t._v(" "), i("Modal", {
@@ -373,7 +409,12 @@ webpackJsonp([1], {
                         EditedName: this.srcdishname,
                         EditedDescription: this.srcdescription,
                         EditedPrice: this.srcdishprice,
-                        EditedImage: this.image_url
+                        EditedImage: this.image_url,
+                        EditedCode: this.srcdishcode,
+                        EditedCategory: this.getSelectedCategoryName,
+                        EditedNewSpec: this.getSelectedNewSpec,
+                        EditedNewUnit: this.getSelectedNewUnit,
+                        EditedNewStatus: this.getSelectedNewStatus,
                     };
                     this.$emit("AddNewDish", t)
                 }, handleSuccess: function (t, e) {
@@ -569,7 +610,12 @@ webpackJsonp([1], {
                             dishname: e.food_name,
                             description: e.description,
                             price: e.price,
-                            image: e.image
+                            image: e.image,
+                            newCode: e.newCode,
+                            categoryName:e.categoryName,
+                            newSpec: e.newSpec,
+                            newUnit: e.newUnit,
+                            newStatus:e.newStatus,
                         },
                         on: {
                             remove: function (i) {

@@ -76,7 +76,7 @@
 				newpage:1
 			}
 		},
-		components: {
+    components: {
 			Dish,
 			Addwindow
 		},
