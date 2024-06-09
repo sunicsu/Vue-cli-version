@@ -1,0 +1,182 @@
+<template>
+  <Content :style="{padding: '0 16px 16px'}">
+    <Breadcrumb :style="{margin: '16px 0'}">
+      <BreadcrumbItem>主页</BreadcrumbItem>
+      <BreadcrumbItem>评论管理</BreadcrumbItem>
+    </Breadcrumb>
+    <div class="main-wrapper">
+      <h1> 评论列表 </h1>
+      <div class="table-wrapper">
+        <Table stripe size="large" :columns="commentHeader" :data="commentItems"></Table>
+        <h3 v-if="commentItems.length === 0">正在获取评论数据，请耐心等待...</h3>
+      </div>
+
+    </div>
+
+  </Content>
+</template>
+
+<script>
+  export default {
+  data () {
+    return {
+      timeout: true,
+      commentHeader: [
+        {
+          title: '评论编号',
+          key: 'comments_id'
+        },
+        {
+          title: '昵称',
+          key: 'comments_name'
+        },
+        {
+          title: '晒图',
+          key: 'image'
+        },
+        {
+          title: '标题',
+          key: 'comments_title'
+        },
+        {
+          title: '内容',
+          key: 'description'
+        },
+        {
+          title: '时间',
+          key: 'time'
+        },
+        {
+          title: '操作',
+          key: 'action',
+          render: (h, params) => {
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.showDetailModal(params.index)
+                  }
+                }
+              }, '查看')
+            ])
+          }
+
+
+
+        }
+      ],
+      commentItems: []
+    }
+  },
+  methods: {
+    showDetailModal(index) {
+      this.$Modal.info({
+        width: '600px',
+        title: '评论内容',
+        render: (h) => {
+          return h('div', [
+            h('div', {
+                style: {
+                  padding: '12px 0',
+                  fontSize: '14px'
+                }
+              },
+              [
+                h('p', {
+                    style: {
+                      display: 'inline-block',
+                      padding: '0 12px'
+                    }
+                  },
+                  '评论编号：' + this.commentItems[index].comments_id),
+                h('p', {
+                    style: {
+                      display: 'inline-block',
+                      padding: '0 12px'
+                    }
+                  },
+                  '昵称：' + this.commentItems[index].comments_name),
+
+                h('p', {
+                    style: {
+                      display: 'inline-block',
+                      padding: '0 12px'
+                    }
+                  },
+                  '标题：' + this.commentItems[index].comments_title),
+                h('p', {
+                    style: {
+                      display: 'inline-block',
+                      padding: '0 12px'
+                    }
+                  },
+                  '内容：' + this.commentItems[index].description),
+              ]),
+          ])
+        }
+      })
+    },
+    updateData() {
+      /* 蜜汁4号餐厅 */
+      this.axios.get('/api/get_comments')
+        .then(res => {
+          if (res.status == '200') {
+            console.log(res)
+            this.$set(this, 'commentItems', res.data.comments)
+          } else {
+            console.log("获取评论失败")
+          }
+
+        })
+        .catch(err => {
+          console.log('err: ', err)
+          if (err.status == '400') {
+            console.log("获取评论失败")
+          }
+        });
+
+      /* dangerous!! */
+      if (this.timeout)
+        setTimeout(this.updateData.bind(this), 10000);
+    }
+  },
+    created() {
+      console.log('comment list created');
+      this.timeout = true;
+      this.updateData();
+    },
+    destroyed() {
+      this.timeout = false;
+    }
+
+}
+</script>
+
+<style scoped>
+.main-wrapper {
+  min-height: 500px;
+  width: 100%;
+  border: 1px solid #dddee1;
+  border-color: #e9eaec;
+  border-radius: 4px;
+  padding: 24px;
+  background: #fff;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.table-wrapper {
+  margin-top: 24px;
+}
+
+.table-content {
+  font-size: 20px;
+}
+</style>

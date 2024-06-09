@@ -106,7 +106,14 @@
                                         padding: '0 12px'
                                     }
                                 },
-                                 '总价：' + this.orderItems[index].total_price)
+                                 '总价：' + this.orderItems[index].total_price),
+                                h('p', {
+                                    style: {
+                                      display: 'inline-block',
+                                      padding: '0 12px'
+                                    }
+                                  },
+                                  '客户要求：' + this.orderItems[index].notes)
                             ]),
                             h('Table', {
                                 props: {

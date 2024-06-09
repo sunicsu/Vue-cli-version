@@ -6,6 +6,7 @@ import RestaurantInfo from '@/components/RestaurantInfo'
 import Menu from '@/components/Menu'
 import Order from '@/components/Order'
 import QRcode from '@/components/QRcode'
+import comment from '@/components/comment'
 
 Vue.use(Router)
 
@@ -35,7 +36,11 @@ export default new Router({
       	{
       		path: 'order',
       		component: Order
-      	}
+      	},
+        {
+          path: 'comment',
+          component: comment
+        }
       ]
     },
     {
