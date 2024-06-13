@@ -73,7 +73,7 @@
         methods: {
             showDetailModal (index) {
                 this.$Modal.info({
-                    width: '600px',
+                    width: '400px',
                     title: '订单内容',
                     render: (h) => {
                         return h('div', [
@@ -123,12 +123,6 @@
                                         key: 'food_name',
                                         render: (h, params) => {
                                             return h('span', params.row.food.food_name)
-                                        }
-                                    }, {
-                                        title: '描述',
-                                        key: 'description',
-                                        render: (h, params) => {
-                                            return h('span', params.row.food.description)
                                         }
                                     }, {
                                         title: '单价',

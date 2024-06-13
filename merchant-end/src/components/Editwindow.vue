@@ -182,10 +182,10 @@
 			handleSuccess(res, file) {
 				console.log(res);
 				console.log(file);
-				this.srcimage = res.url;
+				this.newEditedImage = res.url;
 				this.upload_finished = true;
 				this.DeliverData();
-				console.log(this.srcimage);
+				console.log(this.newEditedImage);
 			},
 			reset() {
 				this.$refs.upload.clearFiles();

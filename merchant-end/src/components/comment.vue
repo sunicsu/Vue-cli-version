@@ -32,7 +32,19 @@
         },
         {
           title: '晒图',
-          key: 'image'
+          key: 'image',
+          //增加一个显示图片的插槽render属性
+          render: (h, params) => {
+            return h('img', {
+              attrs: {
+                src: params.row.image
+              },
+              style: {
+                width: '80px',
+                height: '80px'
+              }
+            })
+          }
         },
         {
           title: '标题',
@@ -64,12 +76,23 @@
                     this.showDetailModal(params.index)
                   }
                 }
-              }, '查看')
+              }, '查看'),
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.removeItem(params.index + 1)
+                    }
+                }
+              }, '删除')
             ])
           }
-
-
-
         }
       ],
       commentItems: []
@@ -111,6 +134,7 @@
                     }
                   },
                   '标题：' + this.commentItems[index].comments_title),
+
                 h('p', {
                     style: {
                       display: 'inline-block',
@@ -123,8 +147,32 @@
         }
       })
     },
+    removeItem(index) {
+      this.$Modal.confirm({
+        title:'确认删除',
+        content:'是否确认删除该条评论？',
+        loading: true,
+        onOk: () => {
+          var _this = this;
+          this.axios.delete('api/manage_comments/'+index, {
+          })
+            .then(function(response) {
+              console.log(response);
+              _this.$Modal.remove();
+              _this.$Message.success('删除成功！');
+              _this.RefreshList(_this.newpage);
+            })
+            .catch(function(error) {
+              _this.$Modal.remove();
+              _this.$Message.error('删除失败！');
+              console.log(error);
+            });
+        }
+      });
+
+    },
     updateData() {
-      /* 蜜汁4号餐厅 */
+      /* 六和居 */
       this.axios.get('/api/get_comments')
         .then(res => {
           if (res.status == '200') {
