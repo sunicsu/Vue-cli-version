@@ -56,7 +56,15 @@
         },
         {
           title: '时间',
-          key: 'time'
+          key: 'time',
+          render: (h, params) => {
+            let date = new Date(params.row.time);
+            let formatDate = `
+                                ${date.getFullYear()}-${(date.getMonth()+1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}
+                                ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}
+                            `
+            return h('span', formatDate)
+          }
         },
         {
           title: '操作',
@@ -87,7 +95,7 @@
                 },
                 on: {
                   click: () => {
-                    this.removeItem(params.index + 1)
+                    this.removeItem(params.index)
                     }
                 }
               }, '删除')
@@ -154,7 +162,9 @@
         loading: true,
         onOk: () => {
           var _this = this;
-          this.axios.delete('api/manage_comments/'+index, {
+          //获取数据库里的评论id
+          const id = this.commentItems[index].comments_id;
+          this.axios.delete('api/manage_comments/'+ id, {
           })
             .then(function(response) {
               console.log(response);

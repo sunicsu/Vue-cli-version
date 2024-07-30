@@ -58,6 +58,7 @@
 <script>
 	import Dish from '@/components/Dish'
 	import Addwindow from '@/components/Addwindow'
+  import ModifyOrder from '@/components/ModifyOrder'
 	export default {
 		data() {
 			return {
@@ -78,7 +79,8 @@
 		},
     components: {
 			Dish,
-			Addwindow
+			Addwindow,
+      ModifyOrder
 		},
 		methods: {
 			addNewDish() {

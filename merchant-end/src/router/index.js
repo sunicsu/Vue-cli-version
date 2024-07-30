@@ -7,6 +7,9 @@ import Menu from '@/components/Menu'
 import Order from '@/components/Order'
 import QRcode from '@/components/QRcode'
 import comment from '@/components/comment'
+// import tablerender from '@/components/tablerender'
+import ModifyOrder from '@/components/ModifyOrder'
+import AddDish from "../components/AddDish";
 
 Vue.use(Router)
 
@@ -23,7 +26,10 @@ export default new Router({
       children: [
       	{
       		path: 'restaurantinfo',
-      		component: RestaurantInfo
+      		component: RestaurantInfo,
+          meta: {
+            keepAlive: false, //此组件不需要被缓存
+          }
       	},
       	{
       		path: 'menu',
@@ -40,6 +46,24 @@ export default new Router({
         {
           path: 'comment',
           component: comment
+        },
+        {
+          path: 'modifyorder',
+          name: "modifyorder",
+          component: ModifyOrder,
+          meta: {
+            keepAlive: true, //此组件需要被缓存
+            isBack:false, //用于判断上一个页面是哪个
+          }
+        },
+        {
+          path: 'adddish',
+          name: "adddish",
+          component: AddDish,
+          meta: {
+            keepAlive: true, //此组件需要被缓存
+            isBack:false, //用于判断上一个页面是哪个
+          }
         }
       ]
     },

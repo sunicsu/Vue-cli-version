@@ -2,7 +2,7 @@
     <Content :style="{padding: '0 16px 16px'}">
         <Breadcrumb :style="{margin: '16px 0'}">
             <BreadcrumbItem>主页</BreadcrumbItem>
-            <BreadcrumbItem>订单管理</BreadcrumbItem>
+            <BreadcrumbItem>订单查看</BreadcrumbItem>
         </Breadcrumb>
         <div class="main-wrapper">
             <h1> 订单 </h1>
@@ -16,6 +16,7 @@
 
 <script>
     export default {
+
         data () {
             return {
                 timeout: true,
@@ -25,8 +26,16 @@
                         key: 'order_id'
                     },
                     {
+                      title: '客户姓名',
+                      key: 'nickname'
+                    },
+                    {
                         title: '房间',
                         key: 'table_id'
+                    },
+                    {
+                      title: '联系电话',
+                      key: 'mobile'
                     },
                     {
                         title: '总价',
@@ -38,7 +47,7 @@
                         render: (h, params) => {
                             let date = new Date(params.row.order_time);
                             let formatDate = `
-                                ${date.getFullYear()}-${date.getMonth().toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}
+                                ${date.getFullYear()}-${(date.getMonth() + 1) .toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}
                                 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}
                             `
                             return h('span', formatDate)
@@ -62,37 +71,67 @@
                                         this.showDetailModal(params.index)
                                     }
                                     }
-                                }, '查看')
-                            ])
+                                }, '查看'),
+                              h('Button', {
+                                props: {
+                                  type: 'primary',
+                                  size: 'small'
+                                },
+                                style: {
+                                  marginRight: '5px'
+                                },
+                                on: {
+                                  click: () => {
+                                    this.modifyModal(params.index)
+                                  }
+                                }
+                              }, '修改')
+                              ])
+
                         }
+
                     }
                 ],
                 orderItems: []
             }
         },
         methods: {
-            showDetailModal (index) {
-                this.$Modal.info({
-                    width: '400px',
-                    title: '订单内容',
-                    render: (h) => {
-                        return h('div', [
-                            h('div', {
-                                style: {
-                                    padding: '12px 0',
-                                    fontSize: '14px'
-                                }
-                            },
-                            [
-                                h('p', {
-                                    style: {
-                                        display: 'inline-block',
-                                        padding: '0 12px'
-                                    }
+          showDetailModal (index) {
+              this.$Modal.info({
+                  width: '450px',
+                  title: '订单内容',
+                  render: (h) => {
+                      return h('div', [
+                          h('div', {
+                              style: {
+                                  padding: '12px 0',
+                                  fontSize: '12px'
+                              }
+                          },
+                          [
+                              h('p', {
+                                  style: {
+                                      display: 'inline-block',
+                                      padding: '0 12px'
+                                  }
+                              },
+                              '订单号：' + this.orderItems[index].order_id),
+                              h('p', {
+                                  style: {
+                                    display: 'inline-block',
+                                    padding: '0 12px'
+                                  }
                                 },
-                                '订单号：' + this.orderItems[index].order_id),
+                                '客户姓名：' + this.orderItems[index].nickname),
+                              h('p', {
+                                  style: {
+                                    display: 'inline-block',
+                                    padding: '0 12px'
+                                  }
+                                },
+                                '联系电话：' + this.orderItems[index].mobile),
 
-                                h('p', {
+                              h('p', {
                                     style: {
                                         display: 'inline-block',
                                         padding: '0 12px'
@@ -114,61 +153,71 @@
                                     }
                                   },
                                   '客户要求：' + this.orderItems[index].notes)
-                            ]),
-                            h('Table', {
-                                props: {
-                                    size: 'default',
-                                    columns: [{
-                                        title: '菜名',
-                                        key: 'food_name',
-                                        render: (h, params) => {
-                                            return h('span', params.row.food.food_name)
-                                        }
-                                    }, {
-                                        title: '单价',
-                                        key: 'price',
-                                        render: (h, params) => {
-                                            return h('span', params.row.food.price)
-                                        }
-                                    }, {
-                                        title: '数量',
-                                        key: 'num'
-                                    }],
-                                    data: this.orderItems[index].detail
-                                },
-                                on: {
-                                    input: (val) => {
-                                        this.value = val;
-                                    }
-                                }
-                            })
-                        ])
-                    }
-                })
-            },
-            updateData() {
-                /* 蜜汁4号餐厅 */
-                this.axios.get('/api/restaurant/orders/4')
-                    .then(res => {
-                        if(res.status =='200') {
-                            console.log(res)
-                            this.$set(this,'orderItems', res.data)
-                        } else {
-                            console.log("获取订单失败")
-                        }
+                          ]),
+                          h('Table', {
+                              props: {
+                                  size: 'default',
+                                  columns: [{
+                                      title: '菜名',
+                                      key: 'food_name',
+                                      render: (h, params) => {
+                                          return h('span', params.row.food.food_name)
+                                      }
+                                  }, {
+                                      title: '单价',
+                                      key: 'price',
+                                      render: (h, params) => {
+                                          return h('span', params.row.food.price)
+                                      }
+                                  }, {
+                                      title: '数量',
+                                      key: 'num'
+                                  }],
+                                  data: this.orderItems[index].detail
+                              },
+                              on: {
+                                  input: (val) => {
+                                      this.value = val;
+                                  }
+                              }
+                          })
+                      ])
+                  }
+              })
+          },
+          modifyModal (index) {
+            this.$router.push({path:'modifyorder',query:{data: this.orderItems[index]}})
+          },
+          updateData() {
+              /* 蜜汁4号餐厅 */
+              this.axios.get('/api/restaurant/orders/4')
+                  .then(res => {
+                      if(res.status =='200') {
+                          console.log(res)
+                          this.$set(this,'orderItems', res.data)
+                      } else {
+                          console.log("获取订单失败")
+                      }
 
-                    })
-                    .catch(err => {
-                        console.log('err: ', err)
-                        if(err.status == '400') {
-                            console.log("获取订单失败")
-                        }
-                    });
+                  })
+                  .catch(err => {
+                      console.log('err: ', err)
+                      if(err.status == '400') {
+                          console.log("获取订单失败")
+                      }
+                  });
 
-                /* dangerous!! */
-                if (this.timeout)
-                    setTimeout(this.updateData.bind(this), 10000);
-            }
+              /* dangerous!! */
+              if (this.timeout)
+                  setTimeout(this.updateData.bind(this), 10000);
+          },
+          increment(){
+            console.log("this is increment!")
+            this.dishNum = this.dishNum + 1
+          },
+          decrement(){
+            console.log("this is decrement!")
+          }
         },
         created() {
             console.log('order created');
@@ -191,14 +240,21 @@
         border-radius: 4px;
         padding: 24px;
         background: #fff;
-        font-size: 14px;
+        font-size: 12px;
         box-sizing: border-box;
     }
 
     .table-wrapper {
         margin-top: 24px;
     }
-
+    .btn{
+      width: 200px;
+      height: 50px;
+      line-height: 50px;
+      background: green;
+      border-radius: 7px;
+      border: none;
+    }
     .table-content {
         font-size: 20px;
     }
