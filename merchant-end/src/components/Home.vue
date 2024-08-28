@@ -55,6 +55,7 @@
                         <router-link to="/home/order">
                             <MenuItem name="1-3">订单管理</MenuItem>
                         </router-link>
+
                         <router-link to="/home/comment">
                           <MenuItem name="1-4">评论管理</MenuItem>
                         </router-link>

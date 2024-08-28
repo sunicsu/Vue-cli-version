@@ -23,6 +23,9 @@ export default new Router({
     {
       path: '/home',
       component: Home,
+      // meta: {
+      //   keepAlive: true,
+      // },
       children: [
       	{
       		path: 'restaurantinfo',
@@ -41,7 +44,7 @@ export default new Router({
         },
       	{
       		path: 'order',
-      		component: Order
+      		component: Order,
       	},
         {
           path: 'comment',
@@ -51,19 +54,19 @@ export default new Router({
           path: 'modifyorder',
           name: "modifyorder",
           component: ModifyOrder,
-          meta: {
-            keepAlive: true, //此组件需要被缓存
-            isBack:false, //用于判断上一个页面是哪个
-          }
+          // meta: {
+          //   keepAlive: true, //此组件需要被缓存
+          //   isBack:false, //用于判断上一个页面是哪个
+          // }
         },
         {
           path: 'adddish',
           name: "adddish",
           component: AddDish,
-          meta: {
-            keepAlive: true, //此组件需要被缓存
-            isBack:false, //用于判断上一个页面是哪个
-          }
+          // meta: {
+          //   keepAlive: true, //此组件需要被缓存
+          //   isBack:false, //用于判断上一个页面是哪个
+          // }
         }
       ]
     },

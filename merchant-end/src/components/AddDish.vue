@@ -9,6 +9,8 @@
         <h2>请选择菜品</h2>
         <Table :columns="columns" :data="dishItems"></Table>
         <Button type="primary" @click="createOrder">确定下单</Button>
+        <Button type="primary" @click="cancel">取消</Button>
+<!--        <router-link to="/home/modifyorder">确定下单</router-link>-->
       </div>
 
     </div>
@@ -63,12 +65,12 @@ export default {
                     click: () => {
                       row.num = this.editNum;
                       let foods = {}
-                      let newnum = {num: row.num}
-                      const food = { food_id: row.food_id, food_name:row.food_name, price: row.price, num: row.num };
+                      let newnum = row.num
+                      const food = { food_id: row.food_id, food_name:row.food_name, price: row.price};
                       foods = {food: food}
                       foods.num = newnum
                       this.selectdishitems.push(foods);
-                      sessionStorage.setItem('selectdishitems', JSON.stringify(this.selectdishitems)),
+                      sessionStorage.setItem('selectdishitems', JSON.stringify(this.selectdishitems));
                       this.editIndex = -1;
                     }
                   }
@@ -98,7 +100,7 @@ export default {
         },
       ],
       modal1: false,
-      orderitems: this.$route.query.data,
+      // orderitems: this.$route.query.data,
       editIndex: -1,  // 当前聚焦的输入框的行数
       editNum: '',  // 第三列输入框
       change: false,
@@ -135,36 +137,37 @@ export default {
         setTimeout(this.updateData.bind(this), 10000);
     },
     createOrder(){
-      this.$Modal.confirm({
-        title:'确认添加',
-        content:'确认要增加所选菜品？',
-        loading:true,
-        onOk: () => {
-          var _this = this;
-          // this.axios.put('api/restaurant/orders/'+this.orderitems.restaurant_id+'/'+this.orderitems.table_id, {
-          //   food_id: this.selectDishItems.food_id,
-          //   num: this.selectDishItems.num,
-          //   })
-          //   .then(function(response) {
-          //     _this.$Modal.remove();
-          //     _this.$Message.success('添加成功！');
-          //     console.log(response);
-          //   })
-          //   .catch(function(error) {
-          //     _this.$Modal.remove();
-          //     _this.$Message.error('添加失败！');
-          //     console.log(error);
-          //   });
-          this.$router.push({path:'modifyorder', query:{data: _this.selectdishitems}})
-          // sessionStorage.setItem('selectdishitems', JSON.stringify(_this.selectdishitems))
-          // _this.$router.go(-1)
+      // this.$router.push({path:'/home/order/modifyorder',query:{data: this.selectdishitems}})
+      this.$router.push({name:'modifyorder',query:{data: this.selectdishitems}})
+      // this.$router.go(-1)
+      // this.$Modal.confirm({
+      //   title:'确认添加',
+      //   content:'确认要增加所选菜品？',
+      //   loading:true,
+      //   onOk: () => {
+      //     var _this = this;
+      //     _this.$router.push({name:'modifyorder',query:{data: _this.selectdishitems}})
+      //     // sessionStorage.setItem('selectdishitems', JSON.stringify(_this.selectdishitems))
+      //     // _this.$router.back();
+      //
+      //     _this.$Modal.remove();
+      //   }
+      // });
 
-          _this.$Modal.remove();
-        }
-      });
-
+    },
+    cancel(){
+      this.$router.back();
     }
-  }
+  },
+  // beforeRouteLeave (to, from, next) {
+  //   // 当离开当前页面时执行的逻辑
+  //   if(from.name=='adddish'){
+  //     to.meta.isBack=true;
+  //     //判断是从哪个路由过来的，
+  //     //如果是page2过来的，表明当前页面不需要刷新获取新数据，直接用之前缓存的数据即可
+  //   }
+  //   next(); // 必须调用next()来完成路由跳转
+  // },
 }
 
 
