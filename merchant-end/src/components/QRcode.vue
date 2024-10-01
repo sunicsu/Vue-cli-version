@@ -32,19 +32,19 @@
   	<Card>
       <div style="height: 1000px">
       	<h2 style="color: #80848f">定制餐桌二维码</h2>
-      	<h2 id="tableid">餐桌编号：{{result}}</h2>
+      	<h2 id="tableid">餐桌编号：{{result}} {{table_name}}</h2>
       	<br></br>
       	<div id="qrcode"></div>
       	<br></br>
       	<h3 style="color: #9ea7b4" id="notice">输入餐桌编号，点击确定即可生成相应二维码</h3>
       	<br></br>
-		<InputNumber :min="1" v-model="tableid" id="input"></InputNumber>
-		<Button type="ghost" shape="circle" v-on:click="generate_qrcode">确定</Button>
+		    <InputNumber :min="1" v-model="table_id" id="input" @on-change="GetTableName"></InputNumber>
+		    <Button type="ghost" shape="circle" v-on:click="generate_qrcode">确定</Button>
       </div>
   	</Card>
   </Content>
 
-	
+
 
 </template>
 
@@ -53,46 +53,75 @@
 	export default {
 		data() {
 			return {
-				tableid:1,
+				table_id:1,
 				qrcode:'',
 				result:1,
+        table_name: '富贵',
 			}
 		},
 		methods: {
+      GetTableName() {
+        this.axios.get('/api/get_table_name/' + parseInt(this.table_id))
+          .then(res => {
+            if(res.status =='200') {
+              console.log(res)
+              this.$set(this,'table_name', res.data.tableinfo[0].table_name)
+            } else {
+              console.log("获取桌名失败")
+            }
+
+          })
+          .catch(err => {
+            console.log('err: ', err)
+            if(err.status == '400') {
+              console.log("获取桌名失败")
+            }
+          });
+
+        /* dangerous!! */
+        if (this.timeout)
+          setTimeout(this.GetTableName.bind(this), 10000);
+
+
+      },
+
 			UpdateCode() {
 				var obj = {
 					restaurantId:4,
-					tableId:this.tableid
+          table_id:this.table_id,
+          table_name:this.table_name
 				};
 
 				this.qrcode.makeCode(JSON.stringify(obj));
-					
-				
-				
+
 				console.log(qrcode);
 			},
 			generate_qrcode() {
-				
+        // this.GetTableName();
 				this.UpdateCode();
-				this.result=this.tableid;
+				this.result=this.table_id;
 				this.$Message.config({
 					duration: 2
 				});
 				this.$Message.success('生成二维码成功，餐桌编号为'+this.result);
-				this.tableid='';
+				this.table_id='';
 
 			}
 		},
 		mounted() {
 			var obj = {
 				restaurantId:4,
-				tableId:1
+				table_id: this.table_id,
+        table_name: this.table_name
 			};
 
 			this.qrcode = new QRCode('qrcode', {
 				width:200,
 				height:200,
-				text:JSON.stringify(obj)
+        colorDark:'#e4e4eb',
+        colorLight:'#2b2b2c',
+        correctLevel:3,
+        text:JSON.stringify(obj)
 			});
 		}
 	}

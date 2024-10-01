@@ -10,6 +10,7 @@ import comment from '@/components/comment'
 // import tablerender from '@/components/tablerender'
 import ModifyOrder from '@/components/ModifyOrder'
 import AddDish from "../components/AddDish";
+import OrderPrint from "../components/OrderPrint";
 
 Vue.use(Router)
 
@@ -50,6 +51,7 @@ export default new Router({
           path: 'comment',
           component: comment
         },
+
         {
           path: 'modifyorder',
           name: "modifyorder",
@@ -59,6 +61,11 @@ export default new Router({
           //   isBack:false, //用于判断上一个页面是哪个
           // }
         },
+        {
+          path: 'OrderPrint',
+          component: OrderPrint,
+        },
+
         {
           path: 'adddish',
           name: "adddish",

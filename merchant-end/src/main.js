@@ -11,7 +11,9 @@ import QRCode from 'qrcodejs2'
 
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
+import Print from 'vue-print-nb'
 
+Vue.use(Print)
 Vue.use(iView)
 Vue.use(VueAxios, axios)
 

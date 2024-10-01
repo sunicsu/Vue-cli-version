@@ -15,8 +15,10 @@
 </template>
 
 <script>
+    import Vue from 'vue'
+    import print from 'vue-print-nb';
+    Vue.use(print);
     export default {
-
         data () {
             return {
                 timeout: true,
@@ -96,94 +98,105 @@
             }
         },
         methods: {
+          // showDetailModal (index) {
+          //     this.$Modal.confirm({
+          //         width: '450px',
+          //         title: '订单内容',
+          //         okText: '打印',
+          //         id: 'print_demo',
+          //         render: (h) => {
+          //             return h('div', [
+          //               h('div', {
+          //                   style: {
+          //                       padding: '12px 0',
+          //                       fontSize: '12px'
+          //                   }
+          //               },
+          //               [
+          //                   h('p', {
+          //                       style: {
+          //                           display: 'inline-block',
+          //                           padding: '0 12px'
+          //                       }
+          //                   },
+          //                   '订单号：' + this.orderItems[index].order_id),
+          //                   h('p', {
+          //                       style: {
+          //                         display: 'inline-block',
+          //                         padding: '0 12px'
+          //                       }
+          //                     },
+          //                     '客户姓名：' + this.orderItems[index].nickname),
+          //                   h('p', {
+          //                       style: {
+          //                         display: 'inline-block',
+          //                         padding: '0 12px'
+          //                       }
+          //                     },
+          //                     '联系电话：' + this.orderItems[index].mobile),
+          //
+          //                   h('p', {
+          //                         style: {
+          //                             display: 'inline-block',
+          //                             padding: '0 12px'
+          //                         }
+          //                     },
+          //                      '房间：' + this.orderItems[index].table_id),
+          //
+          //                     h('p', {
+          //                         style: {
+          //                             display: 'inline-block',
+          //                             padding: '0 12px'
+          //                         }
+          //                     },
+          //                      '总价：' + this.orderItems[index].total_price),
+          //                     h('p', {
+          //                         style: {
+          //                           display: 'inline-block',
+          //                           padding: '0 12px'
+          //                         }
+          //                       },
+          //                       '客户要求：' + this.orderItems[index].notes)
+          //               ]),
+          //               h('Table', {
+          //                   props: {
+          //                       size: 'default',
+          //                       columns: [{
+          //                           title: '菜名',
+          //                           key: 'food_name',
+          //                           render: (h, params) => {
+          //                               return h('span', params.row.food.food_name)
+          //                           }
+          //                       }, {
+          //                           title: '单价',
+          //                           key: 'price',
+          //                           render: (h, params) => {
+          //                               return h('span', params.row.food.price)
+          //                           }
+          //                       }, {
+          //                           title: '数量',
+          //                           key: 'num'
+          //                       }],
+          //                       data: this.orderItems[index].detail
+          //                   },
+          //                   on: {
+          //                       input: (val) => {
+          //                           this.value = val;
+          //                       }
+          //                   }
+          //               }),
+          //
+          //
+          //
+          //             ])
+          //         },
+          //         onOk: () => {
+          //           this.print(); // 执行打印操作
+          //         },
+          //     })
+          // },
           showDetailModal (index) {
-              this.$Modal.info({
-                  width: '450px',
-                  title: '订单内容',
-                  render: (h) => {
-                      return h('div', [
-                          h('div', {
-                              style: {
-                                  padding: '12px 0',
-                                  fontSize: '12px'
-                              }
-                          },
-                          [
-                              h('p', {
-                                  style: {
-                                      display: 'inline-block',
-                                      padding: '0 12px'
-                                  }
-                              },
-                              '订单号：' + this.orderItems[index].order_id),
-                              h('p', {
-                                  style: {
-                                    display: 'inline-block',
-                                    padding: '0 12px'
-                                  }
-                                },
-                                '客户姓名：' + this.orderItems[index].nickname),
-                              h('p', {
-                                  style: {
-                                    display: 'inline-block',
-                                    padding: '0 12px'
-                                  }
-                                },
-                                '联系电话：' + this.orderItems[index].mobile),
-
-                              h('p', {
-                                    style: {
-                                        display: 'inline-block',
-                                        padding: '0 12px'
-                                    }
-                                },
-                                 '房间：' + this.orderItems[index].table_id),
-
-                                h('p', {
-                                    style: {
-                                        display: 'inline-block',
-                                        padding: '0 12px'
-                                    }
-                                },
-                                 '总价：' + this.orderItems[index].total_price),
-                                h('p', {
-                                    style: {
-                                      display: 'inline-block',
-                                      padding: '0 12px'
-                                    }
-                                  },
-                                  '客户要求：' + this.orderItems[index].notes)
-                          ]),
-                          h('Table', {
-                              props: {
-                                  size: 'default',
-                                  columns: [{
-                                      title: '菜名',
-                                      key: 'food_name',
-                                      render: (h, params) => {
-                                          return h('span', params.row.food.food_name)
-                                      }
-                                  }, {
-                                      title: '单价',
-                                      key: 'price',
-                                      render: (h, params) => {
-                                          return h('span', params.row.food.price)
-                                      }
-                                  }, {
-                                      title: '数量',
-                                      key: 'num'
-                                  }],
-                                  data: this.orderItems[index].detail
-                              },
-                              on: {
-                                  input: (val) => {
-                                      this.value = val;
-                                  }
-                              }
-                          })
-                      ])
-                  }
-              })
+            this.$router.push({path:'OrderPrint',query:{data: this.orderItems[index]}})
           },
           modifyModal (index) {
             this.$router.push({path:'modifyorder',query:{data: this.orderItems[index]}})
@@ -217,6 +230,10 @@
           },
           decrement(){
             console.log("this is decrement!")
+          },
+          print() {
+            this.$print(this.$refs.print_demo);
+
           }
         },
         created() {
