@@ -7,8 +7,14 @@
         <div class="main-wrapper">
             <h1> 订单 </h1>
             <div class="table-wrapper">
-                <Table stripe size="large" :columns="orderHeader" :data="orderItems"></Table>
+                <Table stripe size="large" :columns="orderHeader" :data="paginatedData"></Table>
                 <h3 v-if="orderItems.length === 0">正在获取订单数据，请耐心等待...</h3>
+            </div>
+            <br></br>
+            <div>
+              <button @click="prevPage" :disabled="currentPage === 1">上一页</button>
+              Page {{ currentPage }} of {{ totalPages }}
+              <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
             </div>
         </div>
     </Content>
@@ -33,7 +39,7 @@
                     },
                     {
                         title: '房间',
-                        key: 'table_id'
+                        key: 'table_name'
                     },
                     {
                       title: '联系电话',
@@ -70,137 +76,43 @@
                                     },
                                     on: {
                                     click: () => {
-                                        this.showDetailModal(params.index)
+                                        this.showDetailModal(params.index + (this.currentPage -1) * this.pageSize)
                                     }
                                     }
                                 }, '查看'),
-                              h('Button', {
-                                props: {
-                                  type: 'primary',
-                                  size: 'small'
-                                },
-                                style: {
-                                  marginRight: '5px'
-                                },
-                                on: {
-                                  click: () => {
-                                    this.modifyModal(params.index)
-                                  }
-                                }
-                              }, '修改')
+                              // h('Button', {
+                              //   props: {
+                              //     type: 'primary',
+                              //     size: 'small'
+                              //   },
+                              //   style: {
+                              //     marginRight: '5px'
+                              //   },
+                              //   on: {
+                              //     click: () => {
+                              //       this.modifyModal(params.index)
+                              //     }
+                              //   }
+                              // }, '修改')
                               ])
 
                         }
 
                     }
                 ],
-                orderItems: []
+                orderItems: [],
+                currentPage: 1, // 当前页码
+                pageSize: 10, // 每页显示的条数
+                totalPages: 0 // 总页数
             }
         },
         methods: {
-          // showDetailModal (index) {
-          //     this.$Modal.confirm({
-          //         width: '450px',
-          //         title: '订单内容',
-          //         okText: '打印',
-          //         id: 'print_demo',
-          //         render: (h) => {
-          //             return h('div', [
-          //               h('div', {
-          //                   style: {
-          //                       padding: '12px 0',
-          //                       fontSize: '12px'
-          //                   }
-          //               },
-          //               [
-          //                   h('p', {
-          //                       style: {
-          //                           display: 'inline-block',
-          //                           padding: '0 12px'
-          //                       }
-          //                   },
-          //                   '订单号：' + this.orderItems[index].order_id),
-          //                   h('p', {
-          //                       style: {
-          //                         display: 'inline-block',
-          //                         padding: '0 12px'
-          //                       }
-          //                     },
-          //                     '客户姓名：' + this.orderItems[index].nickname),
-          //                   h('p', {
-          //                       style: {
-          //                         display: 'inline-block',
-          //                         padding: '0 12px'
-          //                       }
-          //                     },
-          //                     '联系电话：' + this.orderItems[index].mobile),
-          //
-          //                   h('p', {
-          //                         style: {
-          //                             display: 'inline-block',
-          //                             padding: '0 12px'
-          //                         }
-          //                     },
-          //                      '房间：' + this.orderItems[index].table_id),
-          //
-          //                     h('p', {
-          //                         style: {
-          //                             display: 'inline-block',
-          //                             padding: '0 12px'
-          //                         }
-          //                     },
-          //                      '总价：' + this.orderItems[index].total_price),
-          //                     h('p', {
-          //                         style: {
-          //                           display: 'inline-block',
-          //                           padding: '0 12px'
-          //                         }
-          //                       },
-          //                       '客户要求：' + this.orderItems[index].notes)
-          //               ]),
-          //               h('Table', {
-          //                   props: {
-          //                       size: 'default',
-          //                       columns: [{
-          //                           title: '菜名',
-          //                           key: 'food_name',
-          //                           render: (h, params) => {
-          //                               return h('span', params.row.food.food_name)
-          //                           }
-          //                       }, {
-          //                           title: '单价',
-          //                           key: 'price',
-          //                           render: (h, params) => {
-          //                               return h('span', params.row.food.price)
-          //                           }
-          //                       }, {
-          //                           title: '数量',
-          //                           key: 'num'
-          //                       }],
-          //                       data: this.orderItems[index].detail
-          //                   },
-          //                   on: {
-          //                       input: (val) => {
-          //                           this.value = val;
-          //                       }
-          //                   }
-          //               }),
-          //
-          //
-          //
-          //             ])
-          //         },
-          //         onOk: () => {
-          //           this.print(); // 执行打印操作
-          //         },
-          //     })
-          // },
           showDetailModal (index) {
             this.$router.push({path:'OrderPrint',query:{data: this.orderItems[index]}})
           },
-          modifyModal (index) {
-            this.$router.push({path:'modifyorder',query:{data: this.orderItems[index]}})
-          },
+          // modifyModal (index) {
+          //   this.$router.push({path:'modifyorder',query:{data: this.orderItems[index]}})
+          // },
           updateData() {
               /* 蜜汁4号餐厅 */
               this.axios.get('/api/restaurant/orders/4')
@@ -208,6 +120,7 @@
                       if(res.status =='200') {
                           console.log(res)
                           this.$set(this,'orderItems', res.data)
+                          this.totalPages = Math.ceil(this.orderItems.length / this.pageSize);
                       } else {
                           console.log("获取订单失败")
                       }
@@ -234,6 +147,23 @@
           print() {
             this.$print(this.$refs.print_demo);
 
+          },
+          prevPage() {
+            if (this.currentPage > 1) {
+              this.currentPage--;
+            }
+          },
+          nextPage() {
+            if (this.currentPage < this.totalPages) {
+              this.currentPage++;
+            }
+          }
+        },
+        computed: {
+          paginatedData() {
+            const startIndex = (this.currentPage - 1) * this.pageSize;
+            const endIndex = startIndex + this.pageSize;
+            return this.orderItems.slice(startIndex, endIndex);
           }
         },
         created() {

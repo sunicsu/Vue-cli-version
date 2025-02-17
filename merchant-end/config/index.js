@@ -12,11 +12,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        // target: 'https://wx.91htwh.top:443/',
-        target: 'http://127.0.0.1:8000/',
+        target: 'https://wx.91htwh.top:443/',
+        // secure: false,
+        // target: 'http://127.0.0.1:8000/',
         changeOrigin: true,
         pathRewrite: {
+          // '^/api': ''
           '^/api': '/api'
+
         }
       }
     },
@@ -51,8 +54,8 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsSubDirectory: './static',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

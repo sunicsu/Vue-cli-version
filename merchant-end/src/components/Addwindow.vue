@@ -1,9 +1,24 @@
 <style>
+h2 {
+  font-size: 25px;
+}
+p {
+  font-size: 15px;
+  margin: 5px;
+}
+#photo {
+  margin-top: 20px;
+  width: 180px;
+  height: 180px;
+  background-color: gray;
+  margin-left: auto;
+  margin-right: auto;
+}
     /* 设置下拉菜单的高度和行高 */
 .select {
       height: 40px;       /* 设置下拉菜单的高度 */
       line-height: 80px;
-      width: 130px;/* 设置行高以匹配高度 */
+      width: 150px;/* 设置行高以匹配高度 */
       border-color: #dbdce0;
       color: #2b2b2c;
       /* 其他需要的样式 */
@@ -11,7 +26,7 @@
 .Input {
       height: 40px;       /* 设置下拉菜单的高度 */
       /*line-height: 80px;*/
-      width: 150px;/* 设置行高以匹配高度 */
+      width: 200px;/* 设置行高以匹配高度 */
       border-color: #dbdce0;
 }
     /* 设置下拉选项的样式 */
@@ -19,7 +34,7 @@ option {
       color: #2b2b2c;/* 可以在这里设置选项的其他样式，但高度不能直接设置 */
     }
 .textarea-style {
-      width: 250px; /* 设置宽度为100% */
+      width: 200px; /* 设置宽度为100% */
       min-height: 100px; /* 设置最小高度为100px */
       /* 其它样式 */
 }
@@ -27,7 +42,7 @@ option {
 </style>
 <template>
 	<div>
-		<Row span="24">
+		<Row span="20">
 		<Col span="8">
 			<div id="photo" v-if="upload_finished==true">
 				<img :src="this.image_url" style="height:100%;width:100%;">
@@ -43,43 +58,49 @@ option {
       <div>
         <p style="float: left">选择分类</p>
         <br></br>
-        <select class="select" v-model="selectedCategoryName">
+          <select class="select" v-model="selectedCategoryName" @change="DeliverData">
           <option value="" disabled >请选择一个选项</option>
-          <option v-for="option in options" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
+          <option v-for="option in options" :key="option.value" :value="option.value" :autofocus="true">
             {{ option.text }}
           </option>
         </select>
       </div>
-      <p style="float: left">规格</p>
-      <br></br>
-      <select class="select" v-model="selectedNewSpec">
-        <option disabled value="">请选择规格</option>
-        <option v-for="option in options1" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-          {{ option.text }}
-        </option>
-      </select>
-      <p>份数</p>
-      <select class="select" v-model="selectedNewUnit">
-        <option disabled value="">请选择可点份数</option>
-        <option v-for="option in options2" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-          {{ option.text }}
-        </option>
-      </select>
-      <p>状态</p>
-      <select class="select" v-model="selectedNewStatus">
-        <option  disabled value="">请选择状态</option>
-        <option  v-for="option in options3" :key="option.value" :value="option.value" :autofocus="true" @on-change="DeliverData">
-          {{ option.text }}
-        </option>
-      </select>
+      <div>
+        <p>规格</p>
+        <select class="select" v-model="selectedNewSpec" @change="DeliverData">
+          <option disabled value="">请选择规格</option>
+          <option v-for="option in options1" :key="option.value" :value="option.value" :autofocus="true">
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <p>份数</p>
+        <select class="select" v-model="selectedNewUnit" @change="DeliverData">
+          <option disabled value="">请选择可点份数</option>
+          <option v-for="option in options2" :key="option.value" :value="option.value" :autofocus="true">
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <p>状态</p>
+        <select class="select" v-model="selectedNewStatus" @change="DeliverData">
+          <option  disabled value="">请选择状态</option>
+          <option  v-for="option in options3" :key="option.value" :value="option.value" :autofocus="true">
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+
     </Col>
 
-		<Col span="10">
+		<Col span="6">
 			<div>
 				<p style="float: left">菜品名称</p>
 				<br></br>
 				<Tooltip content="菜品名称不能包含中文字符" placement="right-start">
-				<Input class="Input" placeholder="请输入菜名..." :autofocus="true" @on-change="DeliverData" v-model="srcdishname"></Input>
+				<Input class="Input" placeholder="请输入菜名..." :autofocus="true" @on-change="DeliverData" v-model="srcdishname" ></Input>
 				</Tooltip>
 			</div>
       <div>
@@ -121,6 +142,7 @@ option {
         selectedNewSpec: '',
         selectedNewUnit: '',
         selectedNewStatus: '',
+        // errorMessage: null,
         options: [
           { text: '肉类', value: "1" },
           { text: '蔬菜', value: "2" },
@@ -129,7 +151,9 @@ option {
           { text: '海鲜', value: "5" },
           { text: '锅底', value: "6" },
           { text: '主食', value: "7" },
-          { text: '特色锅', value: "8" }
+          { text: '特色锅', value: "8" },
+          { text: '豆制品', value: "9" },
+          { text: '其它', value: "10" }
         ],
         options1: [
           { text: '大盘', value: '大盘' },
@@ -148,18 +172,18 @@ option {
 		},
 		methods: {
 			DeliverData() {
-				let data = {
-					EditedName: this.srcdishname,
-					EditedDescription: this.srcdescription,
-					EditedPrice: this.srcdishprice,
-					EditedImage: this.image_url,
-          EditedCode: this.srcdishcode,
-          EditedCategory: this.selectedCategoryName,
-          EditedNewSpec: this.selectedNewSpec,
-          EditedNewUnit: this.selectedNewUnit,
-          EditedNewStatus: this.selectedNewStatus
-				};
-				this.$emit('AddNewDish', data);
+          let data = {
+            EditedName: this.srcdishname,
+            EditedDescription: this.srcdescription,
+            EditedPrice: this.srcdishprice,
+            EditedImage: this.image_url,
+            EditedCode: this.srcdishcode,
+            EditedCategory: this.selectedCategoryName,
+            EditedNewSpec: this.selectedNewSpec,
+            EditedNewUnit: this.selectedNewUnit,
+            EditedNewStatus: this.selectedNewStatus
+          };
+          this.$emit('AddNewDish', data);
 			},
 			handleSuccess (res, file) {
 				console.log(res);

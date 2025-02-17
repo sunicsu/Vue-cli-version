@@ -7,7 +7,7 @@
     <div class="main-wrapper">
       <div>
         <h2>订单信息</h2>
-        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">订单号：{{orderitems.order_id}}，  客户姓名：{{orderitems.nickname}}，  联系电话：{{orderitems.mobile}}，  房间：{{orderitems.table_id}}，  总价：{{totalPrice}}。</div>
+        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">订单号：{{orderitems.order_id}}，  客户姓名：{{orderitems.nickname}}，  联系电话：{{orderitems.mobile}}，  房间：{{orderitems.table_name}}，  总价：{{totalPrice}}。</div>
         <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">客户要求：{{orderitems.notes}}。</div>
 
         <table-render :columns="columns" :data="data"></table-render>
@@ -155,7 +155,7 @@ export default {
         loading:true,
         onOk: () => {
           var _this = this;
-          this.axios.post('/api/restaurant/orders/4/1/17', {
+          this.axios.post('/api/restaurant/orders/4/' + _this.orderitems.table_id + '/' + _this.orderitems.order_id, {
             foods:_this.data,
             tableID:_this.orderitems.table_id,
             restaurantId:_this.orderitems.restaurant_id,

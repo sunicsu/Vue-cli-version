@@ -57,6 +57,9 @@
 				qrcode:'',
 				result:1,
         table_name: '富贵',
+        status: '',
+        station: "",
+        // url: 'https://wx.91htwh.top/dist/miniprograme/',
 			}
 		},
 		methods: {
@@ -66,6 +69,8 @@
             if(res.status =='200') {
               console.log(res)
               this.$set(this,'table_name', res.data.tableinfo[0].table_name)
+              this.$set(this,'status', res.data.tableinfo[0].status)
+              this.$set(this,'station', res.data.tableinfo[0].station)
             } else {
               console.log("获取桌名失败")
             }
@@ -81,15 +86,16 @@
         /* dangerous!! */
         if (this.timeout)
           setTimeout(this.GetTableName.bind(this), 10000);
-
-
       },
 
 			UpdateCode() {
 				var obj = {
 					restaurantId:4,
           table_id:this.table_id,
-          table_name:this.table_name
+          table_name:this.table_name,
+          status:this.status,
+          station:this.station,
+          // url:this.url
 				};
 
 				this.qrcode.makeCode(JSON.stringify(obj));
@@ -112,7 +118,10 @@
 			var obj = {
 				restaurantId:4,
 				table_id: this.table_id,
-        table_name: this.table_name
+        table_name: this.table_name,
+        status: this.status,
+        station: this.station,
+        // url:this.url
 			};
 
 			this.qrcode = new QRCode('qrcode', {

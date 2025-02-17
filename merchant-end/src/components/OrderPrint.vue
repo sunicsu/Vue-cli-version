@@ -5,15 +5,18 @@
       <BreadcrumbItem>订单打印</BreadcrumbItem>
     </Breadcrumb>
     <div class="main-wrapper">
-      <div id="orderinfo" style="width:100mm">
+      <div id="orderinfo" style="width:72mm">
         <h2>订单信息</h2>
-        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">订单号：{{orderitems.order_id}}，房间：{{orderitems.table_id}}，客户姓名：{{orderitems.nickname}}。</div>
-        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">联系电话：{{orderitems.mobile}}， 总价：{{totalPrice}}。</div>
+        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">订单号：{{orderitems.order_id}}，房间：{{orderitems.table_name}}</div>
+        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">客户姓名：{{orderitems.nickname}}</div>
+        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">联系电话：{{orderitems.mobile}}</div>
+        <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">总价：{{totalPrice}}</div>
         <div :style="{fontSize: '16px', whiteSpace: 'pre-wrap'}">客户要求：{{orderitems.notes}}。</div>
 
         <table-render :columns="columns" :data="data"></table-render>
       </div>
       <Button class="button" type="primary" v-print="'#orderinfo'">打印</Button>
+      <Button class="button" type="primary" @click="modifyModal">修改</Button>
     </div>
 
 <!--    <Button type="primary" v-print="print">打印</Button>-->
@@ -87,7 +90,9 @@ export default {
       this.orderitems = this.$route.query.data
       this.totalPrice = this.orderitems.total_price
     },
-
+    modifyModal () {
+      this.$router.push({path:'modifyorder',query:{data: this.orderitems}})
+    },
   },
 
   watch: {
@@ -107,7 +112,8 @@ export default {
   .main-wrapper {
     position: relative;
     min-height: 500px;
-    width: 101mm;
+    width: 76mm;
+    height: auto;
     border: 1px solid #dddee1;
     border-color: #e9eaec;
     border-radius: 4px;
@@ -118,8 +124,10 @@ export default {
   }
   .button {
     margin-top: 10px;
-    position: absolute;
+    /*position:relative;*/
     left: 40%;
+    margin-right: auto;
+    margin-left:auto;
   }
 
 </style>

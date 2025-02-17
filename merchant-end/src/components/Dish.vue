@@ -7,16 +7,16 @@
 			width: 80%;
 	}
 	p {
-		font-size: 20px;
-		color: #80848f;
+		font-size: 18px;
+		color: #67686b;
 	}
 	#buttongroup {
 		margin-top: -50px;
 		margin-right: 10px;
 	}
 	#photo-list {
-		width: 80px;
-		height: 80px;
+		width: 60px;
+		height: 60px;
 		background-color: #bbbec4;
 		margin-left: auto;
 		margin-right: auto;
@@ -33,7 +33,7 @@
 			</Col>
 			<Col span="4">
 				<p>{{dishname}}</p>
-				<p style="font-size: 18px; color: #80848f;">{{description}}</p>
+				<p style="font-size: 14px; color: #67686b;">{{description}}</p>
 			</Col>
 			<Col span="2">
 				<p>价格：</p>
@@ -49,7 +49,7 @@
       </Col>
       <Col span="2">
         <p>份数：</p>
-        <p>{{newunit}}</p>
+        <p>{{newUnit}}</p>
       </Col>
       <Col span="2">
         <p>编码：</p>
@@ -68,9 +68,8 @@
 		<ButtonGroup style="float: right" id="buttongroup">
       <Button type="primary" v-on:click="modal1 = true">修改</Button>
       <Button v-on:click="$emit('remove')">删除</Button>
-      <Modal width=700 v-model="modal1" @on-ok="ok" @on-cancel="cancel" :mask-closable="false" :closable="false">
+      <Modal width=700 v-model="modal1" @on-ok="ok" @on-cancel="cancel" :loading="loading" :mask-closable="false" :closable="false">
         <h2 slot="header">修改菜品</h2>
-
         <Editwindow v-bind:srcdescription="this.description"
               v-bind:srcdishname="this.dishname"
               v-bind:srcimage="this.image"
@@ -78,7 +77,7 @@
               v-bind:srcdishcode="this.newCode"
               v-bind:getSelectedCategoryName="this.categoryName"
               v-bind:getSelectedNewSpec="this.newSpec"
-              v-bind:getSelectedNewUnit="this.newunit"
+              v-bind:getSelectedNewUnit="this.newUnit"
               v-bind:getSelectedNewStatus="this.newStatus"
               v-on:UpdateDish="Refresh"
               ref="editwin"></Editwindow>
@@ -111,75 +110,60 @@
         tempNewSpec: '',
         tempNewUnit: '',
         tempNewStatus: '',
-				change: false
+				change: false,
+        loading: true
 			}
 		},
 		methods: {
+      messageWarningFn (text) {
+        this.$Message.warning(text)
+        setTimeout(() => {
+          this.loading = false
+          this.$nextTick(() => {
+            this.loading = true
+          })
+        }, 500)
+      },
 			ok() {
+				// if (this.change == true) {
+          if (this.tempNewUnit=='') {
+            this.messageWarningFn('请选择可点份数！')
+            return
+            // this.$Modal.warning({
+            //   title: '菜品名称不能为空',
+            //   content: '请输入菜品名称'
+            // });
+            // this.cancel();
+          } else if (this.tempdescription=='') {
+            this.messageWarningFn('请输入菜品描述！')
+            return
 
-				if (this.change == true) {
+          } else if (this.tempprice=='') {
+            this.messageWarningFn('请输入菜品单价！')
+            return
 
-					if (this.tempname=='') {
-						this.$Modal.warning({
-							title: '菜品名称不能为空',
-							content: '请输入菜品名称'
-						});
+          } else if (this.tempimage=='') {
+            this.messageWarningFn('请上传菜品图片！')
+            return
 
-					} else if (this.tempdescription=='') {
+          }else if (this.tempCode=='') {
+            this.messageWarningFn('请输入菜品编码！')
+            return
 
-						this.$Modal.warning({
-							title: '菜品描述不能为空',
-							content: '请输入菜品描述'
-						});
+          }else if (this.tempNewStatus=='') {
+            this.messageWarningFn('请输入菜品状态！')
+            return
 
-					} else if (this.tempprice=='') {
+          }else if (this.tempname=='') {
+            this.messageWarningFn('请输入菜品名称！')
+            return
 
-						this.$Modal.warning({
-							title: '菜品价格不能为空',
-							content: '请输入菜品价格'
-						});
-
-					} else if (this.tempimage=='') {
-
-						this.$Modal.warning({
-							title: '菜品图片不能为空',
-							content: '请上传菜品图片'
-						});
-
-          } else if (this.tempCode=='') {
-
-            this.$Modal.warning({
-              title: '菜品编码不能为空',
-              content: '请填写编码，类别首字全拼加数字，且首字母大写，数字为该类菜品所加的第几个，如Rou1'
-            });
-
-          } else if (this.tempCategoryName=='') {
-
-            this.$Modal.warning({
-              title: '菜品类别不能为空',
-              content: '请选择类别'
-            });
-
-          } else if (this.tempNewSpec=='') {
-
-            this.$Modal.warning({
-              title: '菜品规格不能为空',
-              content: '请选择规格'
-            });
-
-          } else if (this.tempNewUnit=='') {
-
-            this.$Modal.warning({
-              title: '份数不能为空',
-              content: '请选择份数'
-            });
-
-          } else if (this.tempNewStatus=='') {
-
-            this.$Modal.warning({
-              title: '状态不能为空',
-              content: '请选择状态'
-            });
+          }else if (this.tempCategoryName=='') {
+            this.messageWarningFn('请选择菜品类别！')
+            return
+          }else if (this.tempNewSpec=='') {
+            this.messageWarningFn('请选择菜品规格！')
+            return
 
           } else {
 						this.$Modal.confirm({
@@ -187,7 +171,6 @@
 						content:'确认对菜品信息进行修改？',
 						loading:true,
 						onOk: () => {
-
 							var _this = this;
 							this.axios.put('api/food/4/'+this.dishid, {
 								food_name: _this.tempname,
@@ -200,7 +183,6 @@
                 newUnit:_this.tempNewUnit,
                 newCode:_this.tempCode,
 								priority:1,
-
 							})
 							.then(function(response) {
 								_this.$Modal.remove();
@@ -221,12 +203,11 @@
 								_this.$Message.error('修改失败！');
 								console.log(error);
 							});
-
 						}
 						});
 					}
-
-				}
+				// }
+        this.modal1 = false;
 				this.change = false;
 			},
 			cancel() {
@@ -245,7 +226,7 @@
 				this.change = true;
 			}
 		},
-    props: ['dishname', 'description', 'price', 'dishid', 'image', 'newSpec', 'categoryName','newStatus', 'newunit', 'newCode'],
+    props: ['dishname', 'description', 'price', 'image', 'dishid', 'newSpec', 'categoryName','newStatus', 'newUnit', 'newCode'],
     // mounted() {
     //   getSelectedCategoryName = this.categoryName
     // },

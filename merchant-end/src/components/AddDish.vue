@@ -7,11 +7,18 @@
     <div class="main-wrapper">
       <div>
         <h2>请选择菜品</h2>
-        <Table :columns="columns" :data="dishItems"></Table>
+        <Table :columns="columns" :data="paginatedData"></Table>
         <Button type="primary" @click="createOrder">确定下单</Button>
         <Button type="primary" @click="cancel">取消</Button>
-<!--        <router-link to="/home/modifyorder">确定下单</router-link>-->
+        <button @click="prevPage" :disabled="currentPage === 1">上一页</button>
+        Page {{ currentPage }} of {{ totalPages }}
+        <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
       </div>
+<!--      <div :style="{position:'fixed', right: '200px', bottom: '30px'}">-->
+<!--        <button @click="prevPage" :disabled="currentPage === 1">上一页</button>-->
+<!--        Page {{ currentPage }} of {{ totalPages }}-->
+<!--        <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>-->
+<!--      </div>-->
 
     </div>
   </Content>
@@ -21,12 +28,10 @@
 // import Editwindow from '@/components/Editwindow';
 import TableRender from '../components/table-render/table.vue';
 
-
 export default {
   data () {
     this.updateData();
     return {
-
       columns: [
         { title: 'ID', key: 'food_id' },
         { title: '菜名',  key: 'food_name' },
@@ -106,6 +111,9 @@ export default {
       change: false,
       dishItems: [],
       selectdishitems: [],
+      currentPage: 1, // 当前页码
+      pageSize: 15, // 每页显示的条数
+      totalPages: 0 // 总页数
     }
 
   },
@@ -120,6 +128,7 @@ export default {
             this.dishItems.map((item, index) => {
               item.num = 0; //添加的字段
             })
+            this.totalPages = Math.ceil(this.dishItems.length / this.pageSize);
           } else {
             console.log("获取菜品失败")
           }
@@ -139,35 +148,29 @@ export default {
     createOrder(){
       // this.$router.push({path:'/home/order/modifyorder',query:{data: this.selectdishitems}})
       this.$router.push({name:'modifyorder',query:{data: this.selectdishitems}})
-      // this.$router.go(-1)
-      // this.$Modal.confirm({
-      //   title:'确认添加',
-      //   content:'确认要增加所选菜品？',
-      //   loading:true,
-      //   onOk: () => {
-      //     var _this = this;
-      //     _this.$router.push({name:'modifyorder',query:{data: _this.selectdishitems}})
-      //     // sessionStorage.setItem('selectdishitems', JSON.stringify(_this.selectdishitems))
-      //     // _this.$router.back();
-      //
-      //     _this.$Modal.remove();
-      //   }
-      // });
-
     },
     cancel(){
       this.$router.back();
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
     }
   },
-  // beforeRouteLeave (to, from, next) {
-  //   // 当离开当前页面时执行的逻辑
-  //   if(from.name=='adddish'){
-  //     to.meta.isBack=true;
-  //     //判断是从哪个路由过来的，
-  //     //如果是page2过来的，表明当前页面不需要刷新获取新数据，直接用之前缓存的数据即可
-  //   }
-  //   next(); // 必须调用next()来完成路由跳转
-  // },
+  computed: {
+    paginatedData() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.dishItems.slice(startIndex, endIndex);
+    }
+  },
+
 }
 
 

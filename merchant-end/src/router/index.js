@@ -7,7 +7,10 @@ import Menu from '@/components/Menu'
 import Order from '@/components/Order'
 import QRcode from '@/components/QRcode'
 import comment from '@/components/comment'
+
 // import tablerender from '@/components/tablerender'
+import OrderDishes from '@/components/OrderDishes'
+import Cart from '@/components/Cart'
 import ModifyOrder from '@/components/ModifyOrder'
 import AddDish from "../components/AddDish";
 import OrderPrint from "../components/OrderPrint";
@@ -51,7 +54,17 @@ export default new Router({
           path: 'comment',
           component: comment
         },
-
+        {
+          path: 'OrderDishes',
+          component: OrderDishes,
+          meta: {
+            keepAlive: true, //此组件需要被缓存
+          }
+        },
+        {
+          path: 'Cart',
+          component: Cart,
+        },
         {
           path: 'modifyorder',
           name: "modifyorder",

@@ -34,7 +34,7 @@
 </style>
 <template>
     <div class="layout">
-        <Layout :style="{minHeight: '100vh'}">
+      <Layout :style="{minHeight: '100vh'}">
             <Sider>
                 <div id="logo" style="width: auto; height: 64px;">
                     <img src="../assets/logo.png" alt="logo" style="height:70%;width:70%;">
@@ -50,7 +50,7 @@
                             <MenuItem name="1-1">餐厅信息</MenuItem>
                         </router-link>
                         <router-link to="/home/menu">
-                            <MenuItem name="1-2">菜单管理</MenuItem>
+                            <MenuItem name="1-2">菜品管理</MenuItem>
                         </router-link>
                         <router-link to="/home/order">
                             <MenuItem name="1-3">订单管理</MenuItem>
@@ -64,9 +64,15 @@
                         <router-link to="/home/generate_qrcode">
                         <MenuItem name="2-1">定制餐桌二维码</MenuItem>
                         </router-link>
-                        <MenuItem name="2-2">设置</MenuItem>
+                        <router-link to="/home/OrderDishes">
+                          <MenuItem name="2-2">后台点菜</MenuItem>
+                        </router-link>
+                        <router-link to="/home/Cart">
+                          <MenuItem name="2-3">购物车</MenuItem>
+                        </router-link>
+                        <MenuItem name="2-4">设置</MenuItem>
                     </MenuGroup>
-                     </Submenu>
+                    </Submenu>
                 </Menu>
             </Sider>
             <Layout>
@@ -84,18 +90,47 @@
                                 <Icon type="email" size="26"></Icon>
                             </Badge>
                         </MenuItem>
+                        <MenuItem name="2" style="float:right">
+                          <Badge count="3">
+                            <div @click="modal1 = true">
+                              <Icon type="ios-cart" size="26" ></Icon>
+                            </div>
+<!--                            <router-link to="/home/Cart">-->
+<!--                              <Icon type="ios-cart" size="26" ></Icon>-->
+<!--                            </router-link>-->
+
+                          </Badge>
+                        </MenuItem>
                     </Menu>
                 <router-view></router-view>
             </Layout>
         </Layout>
+      <Modal width=720 :sk-closable="false" :closable="false" v-model="modal1" >
+        <h2 slot="header">购物车</h2>
+        <Cart @UpdateDishData="Refresh"> </Cart>
+      </Modal>
     </div>
+
 </template>
 <script>
-    export default {
-        data() {
-            return {
-                theme1:'light'
-            }
+import Cart from '@/components/Cart'
+ export default {
+     name: "Home",
+     components: { // 注册子组件
+       Cart
+     },
+    data() {
+        return {
+            modal1: false,
+            theme1:'light',
+            cartItems: [],
         }
-    }
+    },
+    methods: {
+      Refresh(data) {
+        this.cartItems = data
+      }
+    },
+
+ }
 </script>

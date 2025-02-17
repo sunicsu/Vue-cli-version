@@ -127,7 +127,7 @@
 				<a href="www.baidu.com">条款</a>
 			</div>
 			<div class="Team">
-				<a>copyright © ChickenDinner8出品</a>
+				<a>copyright © 华腾文惠出品</a>
 			</div>
 		</div>
 	</div>

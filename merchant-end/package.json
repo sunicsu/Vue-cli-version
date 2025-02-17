@@ -2,7 +2,7 @@
   "name": "merchant-end",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "VitaYoung <690326264@qq.com>",
+  "author": "Yujun <771716618@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

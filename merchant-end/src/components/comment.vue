@@ -7,8 +7,13 @@
     <div class="main-wrapper">
       <h1> 评论列表 </h1>
       <div class="table-wrapper">
-        <Table stripe size="large" :columns="commentHeader" :data="commentItems"></Table>
+        <Table stripe size="large" :columns="commentHeader" :data="paginatedData"></Table>
         <h3 v-if="commentItems.length === 0">正在获取评论数据，请耐心等待...</h3>
+      </div>
+      <div :style="{position:'fixed', right: '150px', bottom: '100px'}">
+        <button @click="prevPage" :disabled="currentPage === 1">上一页</button>
+        Page {{ currentPage }} of {{ totalPages }}
+        <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
       </div>
 
     </div>
@@ -81,7 +86,7 @@
                 },
                 on: {
                   click: () => {
-                    this.showDetailModal(params.index)
+                    this.showDetailModal(params.index + (this.currentPage -1) * this.pageSize)
                   }
                 }
               }, '查看'),
@@ -95,7 +100,7 @@
                 },
                 on: {
                   click: () => {
-                    this.removeItem(params.index)
+                    this.removeItem(params.index + (this.currentPage -1) * this.pageSize)
                     }
                 }
               }, '删除')
@@ -103,7 +108,10 @@
           }
         }
       ],
-      commentItems: []
+      commentItems: [],
+      currentPage: 1, // 当前页码
+      pageSize: 6, // 每页显示的条数
+      totalPages: 0 // 总页数
     }
   },
   methods: {
@@ -188,6 +196,7 @@
           if (res.status == '200') {
             console.log(res)
             this.$set(this, 'commentItems', res.data.comments)
+            this.totalPages = Math.ceil(this.commentItems.length / this.pageSize);
           } else {
             console.log("获取评论失败")
           }
@@ -203,35 +212,52 @@
       /* dangerous!! */
       if (this.timeout)
         setTimeout(this.updateData.bind(this), 10000);
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
     }
   },
-    created() {
-      console.log('comment list created');
-      this.timeout = true;
-      this.updateData();
-    },
-    destroyed() {
-      this.timeout = false;
+  computed: {
+    paginatedData() {
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.commentItems.slice(startIndex, endIndex);
     }
+  },
+  created() {
+    console.log('comment list created');
+    this.timeout = true;
+    this.updateData();
+  },
+  destroyed() {
+    this.timeout = false;
+  }
 
 }
 </script>
 
 <style scoped>
 .main-wrapper {
-  min-height: 500px;
+  min-height: 800px;
   width: 100%;
   border: 1px solid #dddee1;
   border-color: #e9eaec;
   border-radius: 4px;
-  padding: 24px;
+  padding: 0px;
   background: #fff;
-  font-size: 14px;
+  font-size: 12px;
   box-sizing: border-box;
 }
 
 .table-wrapper {
-  margin-top: 24px;
+  margin-top: 10px;
 }
 
 .table-content {

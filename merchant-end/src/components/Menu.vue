@@ -21,35 +21,35 @@
 	<Content :style="{padding: '0 16px 16px'}">
   	<Breadcrumb :style="{margin: '16px 0'}">
     	<BreadcrumbItem>主页</BreadcrumbItem>
-      	<BreadcrumbItem>菜单管理</BreadcrumbItem>
+      	<BreadcrumbItem>菜品管理</BreadcrumbItem>
     </Breadcrumb>
   	<Card>
-    	<div style="height: 1000px">
-			<h2 style="color: #80848f">菜单</h2>
-			<br></br>
-			<Button id="addbutton" v-on:click="modal = true" type="dashed" icon="plus">添加菜品</Button>
-			<Modal width=720 v-model="modal" @on-ok="addNewDish" @on-cancel="cancel" :mask-closable="false" :closable="false">
-				<h2 slot="header">添加菜品</h2>
-				<Addwindow v-on:AddNewDish="Refresh" ref="addwin"></Addwindow>
-			</Modal>
-      <Dish v-for="dish in dishes"
-          v-bind:key="dish.food_id"
-          v-bind:dishid="dish.food_id"
-          v-bind:dishname="dish.food_name"
-          v-bind:description="dish.description"
-          v-bind:price="dish.price"
-          v-bind:image="dish.image"
-          v-bind:newCode="dish.newcode"
-          v-bind:categoryName="dish.categoryname"
-          v-bind:newSpec="dish.newspec"
-          v-bind:newunit="dish.newunit"
-          v-bind:newStatus="dish.newstatus"
-          v-on:remove="DeleteDish(dish.food_id)"
-          style="width:90%">
-      </Dish>
-      	</div>
+    	<div style="height: 1200px">
+        <h2 style="color: #80848f">菜品</h2>
+        <br></br>
+        <Button id="addbutton" v-on:click="modal = true" type="dashed" icon="plus">添加菜品</Button>
+        <Modal width=720 v-model="modal" @on-ok="addNewDish" @on-cancel="cancel" :loading="loading" :sk-closable="false" :closable="false">
+          <h2 slot="header">添加菜品</h2>
+          <Addwindow v-on:AddNewDish="Refresh" ref="addwin" ></Addwindow>
+        </Modal>
+        <Dish v-for="dish in dishes"
+            v-bind:key="dish.food_id"
+            v-bind:dishid="dish.food_id"
+            v-bind:dishname="dish.food_name"
+            v-bind:description="dish.description"
+            v-bind:price="dish.price"
+            v-bind:image="dish.image"
+            v-bind:newCode="dish.newcode"
+            v-bind:categoryName="dish.categoryname"
+            v-bind:newSpec="dish.newspec"
+            v-bind:newUnit="dish.newunit"
+            v-bind:newStatus="dish.newstatus"
+            v-on:remove="DeleteDish(dish.food_id)"
+            style="width:90%; height: 80px;">
+        </Dish>
+      </div>
       <div id="pages">
-        <Page :total="100" show-elevator show-sizer @on-change="ChangePage"></Page>
+        <Page :total="200" show-elevator show-sizer @on-change="ChangePage"></Page>
       </div>
   	</Card>
   </Content>
@@ -67,14 +67,15 @@
         categoryname:'',
         newspec:'',
 				newdes:'',
-        newunit:'',
+        newUnit:'',
         newstatus:"",
 				newprice:'',
 				newimage:'',
 				modal: false,
 				alldishes: [],
 				dishes: [],
-				newpage:1
+				newpage:1,
+        loading: true
 			}
 		},
     components: {
@@ -83,44 +84,55 @@
       ModifyOrder
 		},
 		methods: {
+      messageWarningFn (text) {
+        this.$Message.warning(text)
+        setTimeout(() => {
+          this.loading = false
+          this.$nextTick(() => {
+            this.loading = true
+          })
+        }, 500)
+      },
 			addNewDish() {
-				if (this.newname=='') {
-
-					this.$Modal.warning({
-						title: '菜品名称不能为空',
-						content: '请输入菜品名称'
-					});
-
-					this.cancel();
-
+				if (this.newUnit=='') {
+          this.messageWarningFn('请选择可点份数！')
+          return
+          // this.$Modal.warning({
+          //   title: '菜品名称不能为空',
+          //   content: '请输入菜品名称'
+          // });
+					// this.cancel();
 				} else if (this.newdes=='') {
-
-					this.$Modal.warning({
-						title: '菜品描述不能为空',
-						content: '请输入菜品描述'
-					});
-
-					this.cancel();
+          this.messageWarningFn('请输入菜品描述！')
+          return
 
 				} else if (this.newprice=='') {
-
-					this.$Modal.warning({
-						title: '菜品单价不能为空',
-						content: '请输入菜品单价'
-					});
-
-					this.cancel();
+          this.messageWarningFn('请输入菜品单价！')
+          return
 
 				} else if (this.newimage=='') {
+          this.messageWarningFn('请上传菜品图片！')
+          return
 
-					this.$Modal.warning({
-						title: '菜品图片不能为空',
-						content: '请上传菜品图片'
-					});
+        }else if (this.newcode=='') {
+          this.messageWarningFn('请输入菜品编码！')
+          return
 
-					this.cancel();
+        }else if (this.newstatus=='') {
+          this.messageWarningFn('请输入菜品状态！')
+          return
 
-				} else {
+        }else if (this.newname=='') {
+          this.messageWarningFn('请输入菜品名称！')
+          return
+
+        }else if (this.categoryname=='') {
+          this.messageWarningFn('请选择菜品类别！')
+          return
+				}else if (this.newspec=='') {
+          this.messageWarningFn('请选择菜品规格！')
+          return
+        }else {
 					this.$Modal.confirm({
 						title:'确认添加',
 						content:'是否确认添加菜品？',
@@ -136,7 +148,7 @@
                   newCode:_this.newcode,
                   categoryName:_this.categoryname,
                   newSpec:_this.newspec,
-                  newUnit:_this.newunit,
+                  newUnit:_this.newUnit,
                   newStatus:_this.newstatus,
 									priority:1
 								})
@@ -155,8 +167,7 @@
 						}
 					});
 				}
-
-
+        this.modal = false
 				this.$refs.addwin.reset();
 
 			},
@@ -168,16 +179,14 @@
         this.newcode = data.EditedCode;
         this.categoryname = data.EditedCategory;
         this.newspec = data.EditedNewSpec;
-        this.newunit = data.EditedNewUnit;
+        this.newUnit = data.EditedNewUnit;
         this.newstatus = data.EditedNewStatus
 			},
 			RefreshList(page) {
-
 				const loading = this.$Message.loading({
 					content:'正在获取菜单数据，请耐心等待',
 					duration:0
 				});
-
 				var _this = this;
 				this.axios.get('/api/menu/4')
 				.then(function (response) {
@@ -188,28 +197,26 @@
  						console.log(_this.alldishes);
  						_this.dishes.splice(0, _this.dishes.length);
 						var totalDish = _this.alldishes.length;
-						if (totalDish < (page - 1) * 5) {
-
+						if (totalDish < (page - 1) * 10) {
+              this.$Message.loading({
+                content:'没有菜品',
+                duration:10
+              })
 						} else {
-							if (totalDish - (page - 1) * 5 > 5) {
-								_this.dishes=_this.alldishes.reverse().slice((page - 1) * 5, page * 5);
-								_this.alldishes.reverse();
+							if (totalDish - (page - 1) * 10 > 10) {
+								_this.dishes=_this.alldishes.slice((page - 1) * 10, page * 10);
+								// _this.alldishes.reverse();
 							} else {
-								_this.dishes=_this.alldishes.reverse().slice((page - 1) * 5);
-								_this.alldishes.reverse();
+								_this.dishes=_this.alldishes.slice((page - 1) * 10);
+								// _this.alldishes.reverse();
 							}
-
 						}
-
     				}
  				 })
 				.catch(function (error) {
 					setTimeout(loading,1);
     				console.log(error);
  				 });
-
-
-
 			},
 			ChangePage(page) {
 				this.newpage=page;
@@ -217,10 +224,15 @@
 			},
 			cancel() {
 				this.$refs.addwin.reset();
-				this.newname='';
-				this.newdes='';
-				this.newprice='';
-				this.newimage='';
+        this.newname = '';
+        this.newdes = '';
+        this.newprice = '';
+        this.newimage = '';
+        this.newcode = '';
+        this.categoryname = '';
+        this.newspec = '';
+        this.newUnit = '';
+        this.newstatus = ''
 			},
 			DeleteDish(index) {
 				this.$Modal.confirm({
@@ -245,15 +257,11 @@
 						});
 					}
 				});
-
-
-
 			}
 		},
 
 		mounted: function() {
 			this.$nextTick(function () {
-
 				this.RefreshList(1);
       		})
     }
