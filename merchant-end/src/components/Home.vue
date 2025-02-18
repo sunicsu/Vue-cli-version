@@ -126,6 +126,7 @@ import Cart from '@/components/Cart'
             cartItems: [],
         }
     },
+   
     methods: {
       Refresh(data) {
         this.cartItems = data

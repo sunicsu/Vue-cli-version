@@ -186,7 +186,7 @@ export default {
       // let newNum = 1;
       if (index === -1) {
         // 如果已存在，增加数量（可选）
-        cart.push({...product, num: 1, checked: true})
+        cart.push({...product, num: 1, isChecked: false})
       } else {
         // 如果不存在，添加到购物车，并设置数量为点选数量
         cart[index].num = cart[index].num + this.initNum

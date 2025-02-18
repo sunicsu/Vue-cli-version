@@ -37,20 +37,20 @@
         </div>
         <!-- 身体 -->
         <div class="tbody">
-          <div class="tr" :class="{active:item.isChecked}" v-for="(item,index) in cartItems" :key="id">
+          <div class="tr" :class="{active:item.isChecked}" v-for="(item,index) in cartItems" :key="item.food_id">
             <div class="td"><input type="checkbox" v-model="item.isChecked" /></div>
             <div class="td">{{item.food_name}}</div>
-            <div class="td"><img :src="item.icon" alt="" /></div>
-            <div class="td">{{item.price}}</div>
+            <div class="td"><img :src="item.image" alt="" /></div>
+            <div class="td">{{Math.round(item.price)}}</div>
             <div class="td">
               <div class="my-input-number">
-                <button :disabled="item.num <=0 " class="decrease" @click="sub(id)"> - </button>
+                <button :disabled="item.num <=0 " class="decrease" @click="sub(item.food_id)"> - </button>
                 <span class="my-input__inner">{{item.num}}</span>
-                <button class="increase" @click="add(id)"> + </button>
+                <button class="increase" @click="add(item.food_id)"> + </button>
               </div>
             </div>
             <div class="td">{{item.price * item.num}}</div>
-            <div class="td"><button @click="del(id)">删除</button></div>
+            <div class="td"><button @click="del(item.food_id)">删除</button></div>
           </div>
 
         </div>
@@ -101,8 +101,10 @@ export default {
 
   data() {
     return {
+      isChecked: false,
       // cartItems: [],
-      cartItems: JSON.parse(localStorage.getItem('cartData')) || defaultArr
+      // cartItems: JSON.parse(sessionStorage.getItem('cartData')) || defaultArr
+      cartItems: JSON.parse(sessionStorage.getItem('cartData')) || []
     };
   },
   computed: {
@@ -137,7 +139,8 @@ export default {
     cartItems: {
       deep: true,
       handler(newValue) {
-        localStorage.setItem("cartData", JSON.stringify(newValue))
+        sessionStorage.setItem("cartData", JSON.stringify(newValue))
+        this.DeliverData()
       }
     }
   },
@@ -146,14 +149,14 @@ export default {
       this.cartItems.push(item);
     },
     del(id) {
-      this.cartItems = this.cartItems.filter(item => item.id != id)
+      this.cartItems = this.cartItems.filter(item => item.food_id != id)
     },
     add(id) {
-      const fruit = this.cartItems.find(item => item.id === id)
+      const fruit = this.cartItems.find(item => item.food_id === id)
       fruit.num++;
     },
     sub(id) {
-      const fruit = this.cartItems.find(item => item.id === id)
+      const fruit = this.cartItems.find(item => item.food_id === id)
       fruit.num--;
     },
     DeliverData() {
@@ -161,10 +164,14 @@ export default {
       this.$emit('UpdateDishData', data);
     },
   },
-  mounted() {
+  created() {
     const cartData = JSON.parse(sessionStorage.getItem('cartData'))
     this.cartItems = cartData
   },
+  // mounted() {
+  //   const cartData = JSON.parse(sessionStorage.getItem('cartData'))
+  //   this.cartItems = cartData
+  // },
 }
 </script>
 
@@ -189,6 +196,9 @@ export default {
 }
 .thead{
    font-size: 16px;
+}
+.tbody{
+  font-size: 14px;
 }
 .th {
   color: rgba(0, 0, 0, 0.85);
@@ -312,9 +322,9 @@ button.pay {
   cursor: not-allowed!important;
 }
 .my-input-number .my-input__inner {
-  height: 40px;
+  height: 30px;
   width: 20px;
-  line-height: 40px;
+  line-height: 30px;
   text-align: center;
   padding: 0;
   border: none;
@@ -326,21 +336,17 @@ button.pay {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
-.my-input-number .my-input {
-  display: block;
-  position: relative;
-  font-size: 14px;
-  width: 100%;
-}
 .my-input-number .decrease,
 .my-input-number .increase {
+  display: flex;
   width: 30px;
-  height: auto;
+  height: 30px;
   text-align: center;
   background: #f5f7fa;
   color: #606266;
   cursor: pointer;
-  font-size: 13px;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
 }
 .my-input-number .decrease .disabled,
 .my-input-number .increase .disabled {
