@@ -14,6 +14,7 @@ import Cart from '@/components/Cart'
 import ModifyOrder from '@/components/ModifyOrder'
 import AddDish from "../components/AddDish";
 import OrderPrint from "../components/OrderPrint";
+import OrderConfirm from "../components/OrderConfirm"
 
 Vue.use(Router)
 
@@ -77,6 +78,10 @@ export default new Router({
         {
           path: 'OrderPrint',
           component: OrderPrint,
+        },
+        {
+          path: 'OrderConfirm',
+          component: OrderConfirm,
         },
 
         {

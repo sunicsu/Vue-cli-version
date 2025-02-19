@@ -66,12 +66,12 @@
           <!-- 所有商品总价 -->
           <span class="price-box">总价&nbsp;&nbsp;:&nbsp;&nbsp;¥&nbsp;<span class="price">{{totalPrice}}</span></span>
           <!-- 结算按钮 -->
-          <button class="pay">结算( {{totalNum}} )</button>
+          <button class="pay" @click="subOrder">下单( {{totalNum}} )</button>
         </div>
       </div>
     </div>
     <!-- 空车 -->
-    <div class="empty" v-else>🛒空空如也</div>
+    <div class="empty" v-else>🛒还没有点菜呢</div>
   </div>
 </template>
 
@@ -162,6 +162,9 @@ export default {
     DeliverData() {
       let data = this.cartItems;
       this.$emit('UpdateDishData', data);
+    },
+    subOrder(){
+      this.$router.push({path:'OrderConfirm',query:{data: this.cartItems}})
     },
   },
   created() {
