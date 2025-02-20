@@ -119,7 +119,7 @@ export default {
         loading:true,
         onOk: () => {
           var _this = this;
-          this.axios.post('/api/restaurant/orders/4/' + _this.table_id, {
+          this.axios.post('/api/restaurant/system_orders/4/' + _this.table_id, {
             foods:_this.data,
             notes: _this.notes,
             mobile: _this.mobile,
@@ -188,7 +188,6 @@ export default {
   gap: 5px
 }
 .custom-placeholder {
-  color: #68fd01; /* 设置字体颜色 */
   font-size: 14px; /* 设置字体大小 */
 }
 

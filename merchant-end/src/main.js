@@ -16,7 +16,7 @@ import Print from 'vue-print-nb'
 Vue.use(Print)
 Vue.use(iView)
 Vue.use(VueAxios, axios)
-
+axios.defaults.withCredentials = true
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
