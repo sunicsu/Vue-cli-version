@@ -15,16 +15,16 @@
     <h2></h2>
     <div class="product-list">
       <div v-for="(row, index) in chunkedProducts" :key="index" class="product-row">
-        <div v-for="product in row" :key="product.id" class="product-item">
+        <div v-for="product in row" :key="product.food_id" class="product-item">
 <!--      <div v-for="product in paginatedData" :key="product.id" >-->
-          <img style="height: 150px; width: 150px" :src="product.image" alt="Product Image">
+          <img style="height: 130px; width: 130px" :src="product.image" alt="Product Image">
           <div class="text-row">
             <h4>{{ product.food_name }}</h4> <h4>{{ Math.round(product.price)}}  元 </h4>
           </div>
 
 
           <div class="item">
-            <p class="minus-btn" @click="minusNum(product)"> - </p> {{product.num}} <p class="add-btn" @click="addNum(product)"> + </p>  <button @click="addToCart(product)">添  加</button>
+            <p class="minus-btn" @click="minusNum(product.food_id)"> - </p> {{product.num}} <p class="add-btn" @click="addNum(product.food_id)"> + </p>  <button @click="addToCart(product)">添  加</button>
           </div>
         </div>
 
@@ -59,7 +59,7 @@ export default {
       topMenuListBak: [],
       cateDishes: [],
       // cart: [],
-      initNum: 1,
+      // initNum: 1,
       items:[],
       currentPage: 1, // 当前页码
       currentCate: '特色锅',
@@ -167,17 +167,13 @@ export default {
 
       }
     },
-    minusNum(product) {
-      if (product.num>1) {
-        product.num -=1
-      } else {
-        product.num = 1
-      }
-      this.initNum = product.num
+    minusNum(id) {
+      const fruit = this.allDishes.find(item => item.food_id === id)
+      fruit.num--;
     },
-    addNum(product) {
-      product.num +=1
-      this.initNum = product.num
+    addNum(id) {
+      const fruit = this.allDishes.find(item => item.food_id === id)
+      fruit.num++;
     },
     addToCart(product) {
       let cart = JSON.parse(sessionStorage.getItem('cartData')) || []
@@ -185,11 +181,11 @@ export default {
       let index = cart.findIndex(v => v.food_id === product.food_id)
       // let newNum = 1;
       if (index === -1) {
-        // 如果已存在，增加数量（可选）
-        cart.push({...product, num: 1, isChecked: false})
+        // 如果不存在，添加到购物车,并设置数量为点选数量
+        cart.push({...product, isChecked: false})
       } else {
-        // 如果不存在，添加到购物车，并设置数量为点选数量
-        cart[index].num = cart[index].num + this.initNum
+        // 如果存在，仅设置数量为点选数量
+        cart[index].num = cart[index].num + product.num
       }
       product.num = 1 //重置
       sessionStorage.setItem('cartData', JSON.stringify(cart));
@@ -288,7 +284,7 @@ li {
 /*}*/
 .active {
   font-weight: bold;
-  color: red;
+  color: #006efe;
   margin: 0 2px;
 }
 .pagination {

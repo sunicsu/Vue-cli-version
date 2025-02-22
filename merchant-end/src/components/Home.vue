@@ -29,7 +29,7 @@
         font-size: 22px;
     }
     #logo {
-    overflow: hidden;
+    overflow: visible;
 }
 </style>
 <template>
@@ -37,7 +37,7 @@
       <Layout :style="{minHeight: '100vh'}">
             <Sider>
                 <div id="logo" style="width: auto; height: 64px;">
-                    <img src="../assets/logo.png" alt="logo" style="height:70%;width:70%;">
+                    <img src="../assets/logo200.png" alt="logo">
                 </div>
                 <Menu active-name="1-1" theme="dark" width="auto" :open-names="['1']">
                     <Submenu name="1">
@@ -76,9 +76,9 @@
                 </Menu>
             </Sider>
             <Layout>
-                    <Menu mode="horizontal" :theme="theme1" style="height:65px;">
+              <Menu mode="horizontal" :theme="theme1" style="height:65px;">
                         <MenuItem name="1" style="float:right;">
-                            <Avatar src="https://ss0.baidu.com/6ONWsjip0QIZ8tyhnq/it/u=123308412,2828093194&fm=58"/>
+                            <img style="width: 30px; height: 26px; margin-bottom: 0px" src="../assets/logo.jpg"/>
                         </MenuItem>
                         <MenuItem name="2" style="float:right">
                             <Badge dot>
@@ -91,8 +91,9 @@
                             </Badge>
                         </MenuItem>
                         <MenuItem name="2" style="float:right">
-                          <Badge count="3">
-                            <div @click="modal1 = true">
+                          <Badge :count="totalNum">
+<!--                            <div @click="modal1 = true">-->
+                            <div @click="showModal = true">
                               <Icon type="ios-cart" size="26" ></Icon>
                             </div>
 <!--                            <router-link to="/home/Cart">-->
@@ -102,36 +103,44 @@
                           </Badge>
                         </MenuItem>
                     </Menu>
-                <router-view></router-view>
+              <router-view></router-view>
             </Layout>
-        </Layout>
-      <Modal width=720 :sk-closable="false" :closable="false" v-model="modal1" >
-        <h2 slot="header">购物车</h2>
-        <Cart @UpdateDishData="Refresh"> </Cart>
+
+      </Layout>
+      <Modal v-if="showModal" @close="showModal = false" visible=true>
+         <h2 slot="header">购物车</h2>
+         <Cart @UpdateDishData="handleUpdateItems"> </Cart>
       </Modal>
+
     </div>
 
 </template>
 <script>
 import Cart from '@/components/Cart'
+import Modal from '@/components/Modal'
  export default {
      name: "Home",
      components: { // 注册子组件
-       Cart
+       Cart,
+       Modal
      },
     data() {
         return {
-            modal1: false,
+            showModal: false,
             theme1:'light',
-            cartItems: [],
+            // cartItems: [],
+            totalNum: 0,
+            receivedItems: []
         }
     },
 
     methods: {
-      Refresh(data) {
-        this.cartItems = data
-      }
-    },
+      handleUpdateItems(data, totalnum) {
+        this.receivedItems = [...data];
+        this.totalNum = totalnum;
+        console.log('父组件接收到的数据:', this.receivedItems);
+      },
+    }
 
  }
 </script>

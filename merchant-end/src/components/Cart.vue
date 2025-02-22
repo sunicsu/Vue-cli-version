@@ -1,16 +1,5 @@
 <!-- Cart.vue -->
 <template>
-<!--  <div class="cart">-->
-<!--&lt;!&ndash;      <h2>购物车</h2>&ndash;&gt;-->
-<!--      <h3>已选择的菜品</h3>-->
-
-<!--    <ul @on-change="DeliverData" v-model="cartItems">-->
-<!--        <li v-for="(item, index) in cartItems" :key="index" >-->
-<!--          {{ item.food_name }} - {{ item.price }}  - 数量： {{item.num}}-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--      <p>商品总数: {{ cartItems.length }}</p>-->
-<!--  </div>-->
   <div class="app-container" id="app">
     <!-- 顶部banner -->
 <!--    <div class="banner-box"><img src="http://autumnfish.cn/static/fruit.jpg" alt="" /></div>-->
@@ -142,6 +131,13 @@ export default {
         sessionStorage.setItem("cartData", JSON.stringify(newValue))
         this.DeliverData()
       }
+    },
+    isAll: {
+      deep: true,
+      handler(newValue) {
+        this.totalNum = newValue
+        this.DeliverData()
+      }
     }
   },
   methods: {
@@ -161,7 +157,8 @@ export default {
     },
     DeliverData() {
       let data = this.cartItems;
-      this.$emit('UpdateDishData', data);
+      let totalnum = this.totalNum;
+      this.$emit('UpdateDishData', data, totalnum);
     },
     subOrder(){
       this.$router.push({path:'OrderConfirm',query:{data: this.cartItems}})
@@ -182,7 +179,7 @@ export default {
 .app-container {
   padding-bottom: 300px;
   width: 680px;
-  margin: 0 auto;
+  margin-left: 16px;
 }
 
 .breadcrumb {
@@ -271,11 +268,12 @@ button {
   height: 32px;
   padding: 4px 15px;
   font-size: 14px;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 button.pay {
   background-color: #3f85ed;
   margin-left: 20px;
+  border-radius: 5px;
 }
 
 .bottom {

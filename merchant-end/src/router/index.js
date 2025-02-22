@@ -12,9 +12,11 @@ import comment from '@/components/comment'
 import OrderDishes from '@/components/OrderDishes'
 import Cart from '@/components/Cart'
 import ModifyOrder from '@/components/ModifyOrder'
-import AddDish from "../components/AddDish";
-import OrderPrint from "../components/OrderPrint";
+import AddDish from "../components/AddDish"
+import OrderPrint from "../components/OrderPrint"
 import OrderConfirm from "../components/OrderConfirm"
+import Modal from "../components/Modal"
+import OrderInfo from "../components/OrderInfo"
 
 Vue.use(Router)
 
@@ -67,6 +69,10 @@ export default new Router({
           component: Cart,
         },
         {
+          path: 'OrderInfo',
+          component: OrderInfo,
+        },
+        {
           path: 'modifyorder',
           name: "modifyorder",
           component: ModifyOrder,
@@ -78,6 +84,10 @@ export default new Router({
         {
           path: 'OrderPrint',
           component: OrderPrint,
+        },
+        {
+          path: 'Modal',
+          component: Modal,
         },
         {
           path: 'OrderConfirm',
