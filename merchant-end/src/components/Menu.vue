@@ -3,13 +3,14 @@
 		position: absolute;
 		bottom: 0px;
 		right: 0px;
-		margin-right: 3%;
-		margin-bottom: 3%;
+		margin-right: 30%;
+		margin-bottom: 0%;
+    /*justify-content: center;*/
 	}
 	#addbutton {
 		margin-right: auto;
 		margin-left:auto;
-		width: 90%;
+		width: 100%;
 		height: 40px;
 		font-size: 20px;
 		color: #80848f
@@ -24,9 +25,9 @@
       	<BreadcrumbItem>菜品管理</BreadcrumbItem>
     </Breadcrumb>
   	<Card>
-    	<div style="height: 1200px">
+    	<div style="height: 1250px">
         <h2 style="color: #80848f">菜品</h2>
-        <br></br>
+<!--        <br></br>-->
         <Button id="addbutton" v-on:click="modal = true" type="dashed" icon="plus">添加菜品</Button>
         <Modal width=720 v-model="modal" @on-ok="addNewDish" @on-cancel="cancel" :loading="loading" :sk-closable="false" :closable="false">
           <h2 slot="header">添加菜品</h2>
@@ -45,12 +46,14 @@
             v-bind:newUnit="dish.newunit"
             v-bind:newStatus="dish.newstatus"
             v-on:remove="DeleteDish(dish.food_id)"
-            style="width:90%; height: 80px;">
+            style="width:100%; height: 100px;">
         </Dish>
+        <br></br>
+        <div id="pages">
+          <Page :total="200" show-elevator show-sizer @on-change="ChangePage"></Page>
+        </div>
       </div>
-      <div id="pages">
-        <Page :total="200" show-elevator show-sizer @on-change="ChangePage"></Page>
-      </div>
+
   	</Card>
   </Content>
 </template>

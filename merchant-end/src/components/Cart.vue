@@ -91,6 +91,7 @@ export default {
   data() {
     return {
       isChecked: false,
+      showModal: true,
       // cartItems: [],
       // cartItems: JSON.parse(sessionStorage.getItem('cartData')) || defaultArr
       cartItems: JSON.parse(sessionStorage.getItem('cartData')) || []
@@ -158,10 +159,16 @@ export default {
     DeliverData() {
       let data = this.cartItems;
       let totalnum = this.totalNum;
-      this.$emit('UpdateDishData', data, totalnum);
+      let showModal = this.showModal;
+      this.$emit('UpdateDishData', data, totalnum, showModal);
     },
     subOrder(){
+      const showModal = JSON.parse(sessionStorage.getItem('showModal'))
       this.$router.push({path:'OrderConfirm',query:{data: this.cartItems}})
+      if (showModal === true) {
+        this.showModal = false
+      }
+      this.DeliverData()
     },
   },
   created() {

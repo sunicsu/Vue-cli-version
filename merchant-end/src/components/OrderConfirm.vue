@@ -131,8 +131,10 @@ export default {
               _this.$Modal.remove();
               console.log(response);
               _this.$Message.success('添加成功！');
-              // sessionStorage.removeItem('cachedata');
-              // sessionStorage.removeItem('selectdishitems')
+              sessionStorage.removeItem('cartData');
+              sessionStorage.removeItem('showModal')
+              // sessionStorage.removeItem('cartData')
+              _this.router.push("OrderInfo");
             })
             .catch(function(error) {
               _this.$Modal.remove();

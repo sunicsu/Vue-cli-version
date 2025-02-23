@@ -1,10 +1,10 @@
 <style scoped>
 	.dishes {
 			margin-top: 1%;
-			margin-bottom: 1%;
-			margin-left: 5%;
-			margin-right: 5%;
-			width: 80%;
+			margin-bottom: 0;
+			margin-left: 0;
+			margin-right: 0;
+			width: 100%;
 	}
 	p {
 		font-size: 18px;
@@ -26,7 +26,7 @@
 <template>
 	<Card :bordered="false" class="dishes" >
 		<Row>
-			<Col span="4">
+			<Col span="2">
 				<div id="photo-list">
 					<img :src="image" style="height:100%;width:100%;">
 				</div>
@@ -59,34 +59,32 @@
         <p>状态：</p>
         <p>{{newStatus}}</p>
       </Col>
-			<Col span="2">
+			<Col span="3">
 				<p>月销量：</p>
 				<p>------</p>
 			</Col>
-
-		</Row>
-		<ButtonGroup style="float: right" id="buttongroup">
-      <Button type="primary" v-on:click="modal1 = true">修改</Button>
-      <Button v-on:click="$emit('remove')">删除</Button>
+      <Col span="3">
+        <Button type="primary" v-on:click="modal1 = true">修改</Button>
+        <Button v-on:click="$emit('remove')">删除</Button>
+      </Col>
       <Modal width=700 v-model="modal1" @on-ok="ok" @on-cancel="cancel" :loading="loading" :mask-closable="false" :closable="false">
         <h2 slot="header">修改菜品</h2>
         <Editwindow v-bind:srcdescription="this.description"
-              v-bind:srcdishname="this.dishname"
-              v-bind:srcimage="this.image"
-              v-bind:srcdishprice="this.price"
-              v-bind:srcdishcode="this.newCode"
-              v-bind:getSelectedCategoryName="this.categoryName"
-              v-bind:getSelectedNewSpec="this.newSpec"
-              v-bind:getSelectedNewUnit="this.newUnit"
-              v-bind:getSelectedNewStatus="this.newStatus"
-              v-on:UpdateDish="Refresh"
-              ref="editwin"></Editwindow>
+                    v-bind:srcdishname="this.dishname"
+                    v-bind:srcimage="this.image"
+                    v-bind:srcdishprice="this.price"
+                    v-bind:srcdishcode="this.newCode"
+                    v-bind:getSelectedCategoryName="this.categoryName"
+                    v-bind:getSelectedNewSpec="this.newSpec"
+                    v-bind:getSelectedNewUnit="this.newUnit"
+                    v-bind:getSelectedNewStatus="this.newStatus"
+                    v-on:UpdateDish="Refresh"
+                    ref="editwin"></Editwindow>
       </Modal>
-      <Modal v-model="modal2">
-        <Input></Input>
-      </Modal>
-    </ButtonGroup>
-		<hr style="margin-top: 20px" />
+		</Row>
+<!--		<ButtonGroup style="float: right" id="buttongroup">-->
+<!--    </ButtonGroup>-->
+<!--		<hr style="margin-top: 20px" />-->
 
 
 	</Card>

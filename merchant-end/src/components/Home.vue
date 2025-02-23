@@ -93,7 +93,7 @@
                         <MenuItem name="2" style="float:right">
                           <Badge :count="totalNum">
 <!--                            <div @click="modal1 = true">-->
-                            <div @click="showModal = true">
+                            <div @click="openCartModal">
                               <Icon type="ios-cart" size="26" ></Icon>
                             </div>
 <!--                            <router-link to="/home/Cart">-->
@@ -135,12 +135,23 @@ import Modal from '@/components/Modal'
     },
 
     methods: {
-      handleUpdateItems(data, totalnum) {
+      handleUpdateItems(data, totalnum, showModal) {
         this.receivedItems = [...data];
         this.totalNum = totalnum;
+        this.showModal = showModal;
         console.log('父组件接收到的数据:', this.receivedItems);
       },
-    }
+      openCartModal() {
+        this.showModal = true;
+        sessionStorage.setItem("showModal", JSON.stringify(this.showModal))
+      }
+    },
+     // created() {
+     //   const showModal = JSON.parse(sessionStorage.getItem('showModal'))
+     //   if (showModal === false) {
+     //     this.showModal = showModal
+     //   }
+     // }
 
  }
 </script>

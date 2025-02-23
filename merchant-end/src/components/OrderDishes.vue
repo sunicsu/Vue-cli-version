@@ -237,7 +237,7 @@ export default {
   /* 单个产品样式 */
   height: 150px;
   width: 150px;
-  flex: 0 0 calc(15% - 20px); /* 每个项目占%，减去间距 */
+  flex: 1 1 30%;
   margin-bottom: 40px; /* 控制行间距 */
   box-sizing: border-box; /* 确保padding和border不影响布局宽度 */
 
