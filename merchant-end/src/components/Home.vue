@@ -70,7 +70,10 @@
                         <router-link to="/home/Cart">
                           <MenuItem name="2-3">购物车</MenuItem>
                         </router-link>
-                        <MenuItem name="2-4">设置</MenuItem>
+                      <router-link to="/home/OrderInfo">
+                        <MenuItem name="2-4">房间状态</MenuItem>
+                      </router-link>
+                        <MenuItem name="2-5">设置</MenuItem>
                     </MenuGroup>
                     </Submenu>
                 </Menu>
