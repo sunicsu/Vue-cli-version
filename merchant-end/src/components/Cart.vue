@@ -65,6 +65,7 @@
 </template>
 
 <script>
+// import OrderInfo from '@/components/OrderInfo'
 const defaultArr = [
   {
     id: 1,
@@ -84,8 +85,8 @@ const defaultArr = [
 export default {
   modal: true,
   name: 'Cart',
-  // props: {
-  //   cartItems: [],
+  // components: { // 注册子组件
+  //   OrderInfo,
   // },
 
   data() {
