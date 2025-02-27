@@ -187,6 +187,7 @@ export default {
         // 如果存在，仅设置数量为点选数量
         cart[index].num = cart[index].num + product.num
       }
+      this.$Message.warning("成功加入购物车！")
       product.num = 1 //重置
       sessionStorage.setItem('cartData', JSON.stringify(cart));
     }

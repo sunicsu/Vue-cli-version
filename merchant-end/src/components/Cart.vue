@@ -147,8 +147,21 @@ export default {
       this.cartItems.push(item);
     },
     del(id) {
-      this.cartItems = this.cartItems.filter(item => item.food_id != id)
-    },
+      this.$Modal.confirm( {
+        title: '提示',
+        content: '是否确认删除所选菜品？',
+        loading: true,
+        onOk: () => {
+          let _this = this
+          _this.cartItems = _this.cartItems.filter(item => item.food_id != id)
+          _this.$Modal.remove()
+        },
+        onCancel: () => {
+          let _this = this
+          _this.$Modal.remove()
+        }
+      })
+     },
     add(id) {
       const fruit = this.cartItems.find(item => item.food_id === id)
       fruit.num++;

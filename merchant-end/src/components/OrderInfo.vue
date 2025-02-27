@@ -12,7 +12,7 @@
     <Modal width=720 v-model="showModal" @on-ok="addNum" :sk-closable="false" :closable="false">
       <h2 slot="header">就餐人数：</h2>
       <Tooltip :content="canSelectNum" placement="right-start">
-        <Input class="Input" placeholder="请输入您的就餐人数..." :autofocus="true" v-model="newEditedNum"></Input>
+        <Input class="Input" placeholder="请输入您的就餐人数..." :autofocus="true" v-model.number="newEditedNum"></Input>
       </Tooltip>
     </Modal>
   </div>
@@ -32,6 +32,7 @@ export default {
       showModal: false,
       newEditedNum: '',
       canSelectNum: '',
+      table_name: '',
     };
   },
   mounted() {
@@ -59,6 +60,7 @@ export default {
   methods:{
     openNumModal(station, table_name){
       this.showModal = true;
+      this.table_name = table_name;
       this.canSelectNum = '您选择的是'+ table_name + "," + station + ',请正确选择人数，以免太剂！'
     },
     messageWarningFn (text) {
@@ -88,13 +90,14 @@ export default {
             let index = cart.findIndex(v => v.food_id === 159)
             // let newNum = 1;
             if (index === -1) {
-              // 如果不存在，将人数添加到购物车,并设置数量为点选数量
-              cart.push({food_id: 46, food_name: "小料、筷子", price: 6, num: num, checked: false})
+              // 如果不存在，将人数添加到购物车,并设置数量为点选数量, 线上环境food_id是159，开发环境是46
+              cart.push({food_id: 159, food_name: "小料、筷子", price: 6, num: num, isChecked: false})
             } else {
               // 如果存在，仅设置数量为点选数量
               cart[index].num = num
             }
             sessionStorage.setItem('cartData', JSON.stringify(cart));
+            // sessionStorage.setItem('table_id', JSON.stringify(_this.table_id));
             // _this.$emit("inputtedUserNum", num)
             _this.messageWarningFn("就餐人数设置成功！")
             _this.$Modal.remove()
@@ -166,6 +169,16 @@ button{
 }
 .disabled {
   background-color: #d3d1d1;
+}
+.el-message {
+  /* 修改样式 */
+  background-color: #f0f9eb; /* 示例：改变背景颜色 */
+}
+.message-content {
+  white-space: pre-line;
+  word-break: break-word;
+  max-width: 600px;  /* PC端建议值 */
+  line-height: 1.5;
 }
 
 </style>

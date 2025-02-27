@@ -164,7 +164,7 @@ export default {
 	      		if(res.status =='200') {
 	      			_this.$Message.success("登录成功");
 	      			console.log(res);
-	          		this.$router.push({path:'home',query:{id:1}});
+	          		this.$router.push({path:'home/OrderInfo',query:{id:1}});
 	      		} else {
 	      			_this.$Message.error("账号密码错误");
 	      		}

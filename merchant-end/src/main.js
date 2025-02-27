@@ -18,7 +18,10 @@ Vue.use(iView)
 Vue.use(VueAxios, axios)
 axios.defaults.withCredentials = true
 Vue.config.productionTip = false
-
+Vue.prototype.$Message.config({
+  top: 200,
+  duration: 3
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

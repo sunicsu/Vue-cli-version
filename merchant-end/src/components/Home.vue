@@ -136,7 +136,9 @@ import Modal from '@/components/Modal'
             receivedItems: []
         }
     },
+   computed: {
 
+   },
     methods: {
       handleUpdateItems(data, totalnum, showModal) {
         this.receivedItems = [...data];
@@ -145,15 +147,14 @@ import Modal from '@/components/Modal'
         console.log('父组件接收到的数据:', this.receivedItems);
       },
       openCartModal() {
-        this.showModal = true;
-        sessionStorage.setItem("showModal", JSON.stringify(this.showModal))
+        // if (this.receivedItems.length > 0) {
+          this.showModal = true;
+          sessionStorage.setItem("showModal", JSON.stringify(this.showModal))
+        // }
       }
     },
-     // created() {
-     //   const showModal = JSON.parse(sessionStorage.getItem('showModal'))
-     //   if (showModal === false) {
-     //     this.showModal = showModal
-     //   }
+     // mounted() {
+     //
      // }
 
  }
