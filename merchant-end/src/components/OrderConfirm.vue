@@ -132,8 +132,7 @@ export default {
               console.log(response);
               _this.$Message.success('添加成功！');
               sessionStorage.removeItem('cartData');
-              sessionStorage.removeItem('showModal')
-              // sessionStorage.removeItem('cartData')
+              // sessionStorage.removeItem('showModal')
               _this.router.push("OrderInfo");
             })
             .catch(function(error) {

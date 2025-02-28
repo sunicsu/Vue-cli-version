@@ -1,7 +1,7 @@
 <template>
   <div class="grid-container">
     <div class="grid-item" v-for="grid in grids" :key="grid" :class="{active: grid.status === true}">
-      <p style="color:Red;">{{grid.table_name}}</p>
+      <p style="color:#f66906;">{{grid.table_name}}</p>
       <p style="font-size: 18px">{{grid.station}}</p>
       <button :class="{disabled: grid.status === false}" @click="openNumModal(grid.station, grid.table_name)"> 点  餐 </button>
     </div>
@@ -146,7 +146,7 @@ export default {
   box-sizing: border-box; /* 包括边框和内边距在内计算元素总宽度和高度 */
 }
 .active {
-  background-color: #f6edbe;
+  background-color: #e0fcca;
 }
 /* 为了使方格内容不溢出，并保持良好的视觉效果，可以设置最大宽度和高度，或者根据实际需求调整 */
 .grid-item > * {

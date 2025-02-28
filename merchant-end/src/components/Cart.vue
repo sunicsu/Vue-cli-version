@@ -93,9 +93,9 @@ export default {
     return {
       isChecked: false,
       showModal: true,
-      // cartItems: [],
+      cartItems: [],
       // cartItems: JSON.parse(sessionStorage.getItem('cartData')) || defaultArr
-      cartItems: JSON.parse(sessionStorage.getItem('cartData')) || []
+      // cartItems: JSON.parse(sessionStorage.getItem('cartData'))
     };
   },
   computed: {
@@ -180,14 +180,16 @@ export default {
       const showModal = JSON.parse(sessionStorage.getItem('showModal'))
       this.$router.push({path:'OrderConfirm',query:{data: this.cartItems}})
       if (showModal === true) {
-        this.showModal = false
+        this.showModal = false //close Cart Modal
       }
       this.DeliverData()
     },
   },
   created() {
     const cartData = JSON.parse(sessionStorage.getItem('cartData'))
-    this.cartItems = cartData
+    if (cartData.length>0){
+      this.cartItems = cartData
+    }
   },
   // mounted() {
   //   const cartData = JSON.parse(sessionStorage.getItem('cartData'))

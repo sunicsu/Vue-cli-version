@@ -67,9 +67,9 @@
                         <router-link to="/home/OrderDishes">
                           <MenuItem name="2-2">后台点菜</MenuItem>
                         </router-link>
-                        <router-link to="/home/Cart">
-                          <MenuItem name="2-3">购物车</MenuItem>
-                        </router-link>
+<!--                        <router-link to="/home/Cart">-->
+<!--                          <MenuItem name="2-3">购物车</MenuItem>-->
+<!--                        </router-link>-->
                       <router-link to="/home/OrderInfo">
                         <MenuItem name="2-4">房间状态</MenuItem>
                       </router-link>
@@ -147,10 +147,19 @@ import Modal from '@/components/Modal'
         console.log('父组件接收到的数据:', this.receivedItems);
       },
       openCartModal() {
-        // if (this.receivedItems.length > 0) {
+        const cartData = JSON.parse(sessionStorage.getItem('cartData'))
+        if (cartData.length > 0) {
           this.showModal = true;
           sessionStorage.setItem("showModal", JSON.stringify(this.showModal))
+        }
+        // else if (cartData === null) {
+        this.$Message.warning("您还没有点菜呢！")
+
         // }
+
+
+
+
       }
     },
      // mounted() {
