@@ -155,6 +155,10 @@ export default {
           let _this = this
           _this.cartItems = _this.cartItems.filter(item => item.food_id != id)
           _this.$Modal.remove()
+          // if (_this.cartItems === null) {
+          //   sessionStorage.setItem('cartData', JSON.stringify(_this.cartItems));
+          // }
+          this.DeliverData()
         },
         onCancel: () => {
           let _this = this

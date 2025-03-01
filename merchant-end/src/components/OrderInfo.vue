@@ -9,7 +9,7 @@
 <!--      <h2 slot="header">购物车</h2>-->
 <!--      <Input> 请输入人数 </Input>-->
 <!--    </Modal>-->
-    <Modal width=720 v-model="showModal" @on-ok="addNum" :sk-closable="false" :closable="false">
+    <Modal width=720 v-model="showModal" @on-ok="addNum" :sk-closable="false" :closable="false" >
       <h2 slot="header">就餐人数：</h2>
       <Tooltip :content="canSelectNum" placement="right-start">
         <Input class="Input" placeholder="请输入您的就餐人数..." :autofocus="true" v-model.number="newEditedNum"></Input>
@@ -61,7 +61,7 @@ export default {
     openNumModal(station, table_name){
       this.showModal = true;
       this.table_name = table_name;
-      this.canSelectNum = '您选择的是'+ table_name + "," + station + ',请正确选择人数，以免太剂！'
+      this.canSelectNum = '这是'+ table_name + "，" + station + '，请正确选择人数，以免拥挤！'
     },
     messageWarningFn (text) {
       this.$Message.warning(text)
@@ -99,7 +99,7 @@ export default {
             sessionStorage.setItem('cartData', JSON.stringify(cart));
             // sessionStorage.setItem('table_id', JSON.stringify(_this.table_id));
             // _this.$emit("inputtedUserNum", num)
-            _this.messageWarningFn("就餐人数设置成功！")
+            _this.messageWarningFn("就餐人数定好了，快去“后台点菜”页选择菜品吧！")
             _this.$Modal.remove()
           },
           onCancel: () => {
@@ -170,15 +170,15 @@ button{
 .disabled {
   background-color: #d3d1d1;
 }
-.el-message {
-  /* 修改样式 */
-  background-color: #f0f9eb; /* 示例：改变背景颜色 */
+
+/deep/ .ivu-tooltip-inner {
+  min-width: 400px !important;
+  font-size: 14px;
 }
-.message-content {
-  white-space: pre-line;
-  word-break: break-word;
-  max-width: 600px;  /* PC端建议值 */
-  line-height: 1.5;
+/deep/ .ivu-tooltip-popper {
+  min-width: 250px !important;
+  font-size: 14px;
 }
+
 
 </style>

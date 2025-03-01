@@ -148,14 +148,15 @@ import Modal from '@/components/Modal'
       },
       openCartModal() {
         const cartData = JSON.parse(sessionStorage.getItem('cartData'))
-        if (cartData.length > 0) {
-          this.showModal = true;
-          sessionStorage.setItem("showModal", JSON.stringify(this.showModal))
+        if (cartData === null) {
+          // this.showModal = true;
+          this.$Message.warning("您还没有点菜呢！")
+        }else if (cartData.length > 0) {
+            this.showModal = true;
+            sessionStorage.setItem("showModal", JSON.stringify(this.showModal))
+        }else if (this.receivedItems.length === 0) {
+          this.$Message.warning("您还没有点菜呢！")
         }
-        // else if (cartData === null) {
-        this.$Message.warning("您还没有点菜呢！")
-
-        // }
 
 
 
