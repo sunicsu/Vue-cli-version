@@ -1,7 +1,7 @@
 <template>
   <div class="grid-container">
     <div class="grid-item" v-for="grid in grids" :key="grid" :class="{active: grid.status === true}">
-      <p style="color:#f66906;">{{grid.table_name}}</p>
+      <p style="color:#f66906; font-size: 22px">{{grid.table_name}}</p>
       <p style="font-size: 18px">{{grid.station}}</p>
       <button :class="{disabled: grid.status === false}" @click="openNumModal(grid.station, grid.table_name)"> 点  餐 </button>
     </div>
@@ -140,7 +140,7 @@ export default {
   display: flex;
   flex-direction: column; /* 使项目垂直排列 */
   align-items: center;
-  font-size: 26px;
+  /*font-size: 26px;*/
   justify-content: center;
   /* 为了使方格高度能够响应容器高度的变化，我们不为.grid-item设置固定高度 */
   box-sizing: border-box; /* 包括边框和内边距在内计算元素总宽度和高度 */
