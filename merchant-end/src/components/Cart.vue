@@ -11,6 +11,7 @@
     </div>
     <!-- 购物车主体 -->
     <div class="main" v-if="cartItems.length>0">
+      <div style="font-size: 18px; text-align: center; margin: 8px">{{tableName}}</div>
       <div class="table">
         <!-- 头部 -->
         <div class="thead">
@@ -26,6 +27,7 @@
         </div>
         <!-- 身体 -->
         <div class="tbody">
+
           <div class="tr" :class="{active:item.isChecked}" v-for="(item,index) in cartItems" :key="item.food_id">
             <div class="td"><input type="checkbox" v-model="item.isChecked" /></div>
             <div class="td">{{item.food_name}}</div>
@@ -94,6 +96,7 @@ export default {
       isChecked: false,
       showModal: true,
       cartItems: [],
+      tableName: ''
       // cartItems: JSON.parse(sessionStorage.getItem('cartData')) || defaultArr
       // cartItems: JSON.parse(sessionStorage.getItem('cartData'))
     };
@@ -193,6 +196,7 @@ export default {
     const cartData = JSON.parse(sessionStorage.getItem('cartData'))
     if (cartData.length>0){
       this.cartItems = cartData
+      this.tableName = cartData[0].tableName
     }
   },
   // mounted() {

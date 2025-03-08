@@ -8,18 +8,16 @@
       <div id="orderinfo" style="width:72mm">
         <h2>订单信息</h2>
         <table-render :columns="columns" :data="data"></table-render>
+        <p style="margin-top: 10px; font-size: 18px">已选包间：{{tableName}}</p>
         <div class="inputArea">
           <p>客户姓名：</p>
           <input class="custom-placeholder"  v-model="nickname" placeholder="输入客户姓名">
-          <p>所选位置：</p>
-          <select class="select" v-model="table_name" @change="DeliverData">
-            <option disabled value="" >请选择一个座位</option>
-            <option v-for="option in options" :key="option.table_name" :value="option.table_id" :autofocus="true" >
-              {{ option.table_name }}
-            </option>
-          </select>
-<!--          <p>所选位置：</p>-->
-<!--          <input class="custom-placeholder"  v-model="table_name" placeholder="输入座位">-->
+<!--          <select class="select" v-model="table_name" @change="DeliverData">-->
+<!--            <option disabled value="" >请选择一个座位</option>-->
+<!--            <option v-for="option in options" :key="option.table_name" :value="tableName" :autofocus="true" >-->
+<!--              {{ option.table_name }}-->
+<!--            </option>-->
+<!--          </select>-->
           <p>联系电话：</p>
           <input class="custom-placeholder"  v-model="mobile" placeholder="输入联系电话">
           <p>简短要求：</p>
@@ -68,6 +66,7 @@ export default {
       totalPrice: 0,
       nickname: '',
       table_name: '',
+      tableName: '',
       table_id: '',
       mobile: '',
       notes: '',
@@ -84,31 +83,35 @@ export default {
   },
   methods: {
     getData() {
-      this.data = this.$route.query.data
-    },
-    updateData() {
-      /* 六和居 */
-      this.axios.get('/api/TableViewset')
-        .then(res => {
-          if (res.status == '200') {
-            console.log(res)
-            this.$set(this, 'options', res.data)
-          } else {
-            console.log("获取座位数据失败")
-          }
+      let get_data = this.$route.query.data
+      this.data = get_data
+      this.tableName = get_data[0].tableName
+      this.table_id = get_data[0].tableId
 
-        })
-        .catch(err => {
-          console.log('err: ', err)
-          if (err.status == '400') {
-            console.log("获取座位数据失败")
-          }
-        });
-
-      /* dangerous!! */
-      if (this.timeout)
-        setTimeout(this.updateData.bind(this), 10000);
     },
+    // updateData() {
+    //   /* 六和居 */
+    //   this.axios.get('/api/TableViewset')
+    //     .then(res => {
+    //       if (res.status == '200') {
+    //         console.log(res)
+    //         this.$set(this, 'options', res.data)
+    //       } else {
+    //         console.log("获取座位数据失败")
+    //       }
+    //
+    //     })
+    //     .catch(err => {
+    //       console.log('err: ', err)
+    //       if (err.status == '400') {
+    //         console.log("获取座位数据失败")
+    //       }
+    //     });
+    //
+    //   /* dangerous!! */
+    //   if (this.timeout)
+    //     setTimeout(this.updateData.bind(this), 10000);
+    // },
     DeliverData() {
       this.table_id = this.table_name
     },
@@ -151,8 +154,8 @@ export default {
 
   },
   created() {
-    this.getData(),
-    this.updateData()
+    this.getData()
+    // this.updateData()
   },
   mounted() {
 
@@ -184,7 +187,7 @@ export default {
 }
 .inputArea{
   display: grid;
-  font-size: 16px;
+  font-size: 18px;
   margin-top: 5px;
   gap: 5px
 }

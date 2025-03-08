@@ -1,9 +1,9 @@
 <template>
   <div class="grid-container">
     <div class="grid-item" v-for="grid in grids" :key="grid" :class="{active: grid.status === true}">
-      <p style="color:#f66906; font-size: 22px">{{grid.table_name}}</p>
+      <p style="color:#4f2c2e; font-size: 22px">{{grid.table_name}}</p>
       <p style="font-size: 18px">{{grid.station}}</p>
-      <button :class="{disabled: grid.status === false}" @click="openNumModal(grid.station, grid.table_name)"> 点  餐 </button>
+      <button :class="{disabled: grid.status === false}" @click="openNumModal(grid.station, grid.table_name, grid.table_id)"> 点  餐 </button>
     </div>
 <!--    <Modal style="width: 500px; height: 200px; display: flex" v-if="showModal" @close="showModal = false" visible=true>-->
 <!--      <h2 slot="header">购物车</h2>-->
@@ -33,6 +33,7 @@ export default {
       newEditedNum: '',
       canSelectNum: '',
       table_name: '',
+      table_id: '',
     };
   },
   mounted() {
@@ -58,10 +59,35 @@ export default {
         })
   },
   methods:{
-    openNumModal(station, table_name){
-      this.showModal = true;
-      this.table_name = table_name;
-      this.canSelectNum = '这是'+ table_name + "，" + station + '，请正确选择人数，以免拥挤！'
+    openNumModal(station, table_name, table_id){
+      let cart = JSON.parse(sessionStorage.getItem('cartData'))
+      if (cart !== null && cart[0].tableName !== table_name) {
+        // this.messageWarningFn('您要选择其它包间吗！')
+        this.$Modal.confirm({
+          title: '友情提示',
+          content: '更换包间之前所点菜品将自动删除，您是要更换包间、重新点菜吗？',
+          loading: true,
+          onOk: () => {
+            let _this = this;
+            _this.$Modal.remove();
+            sessionStorage.removeItem('cartData');
+            this.showModal = true;
+            this.table_name = table_name;
+            this.table_id = table_id;
+            this.canSelectNum = '这是'+ table_name + "，" + station + '，请正确选择人数，以免拥挤！'
+          },
+          onCancel: () => {
+            let _this = this;
+            _this.$Modal.remove()
+          }
+        })
+      } else {
+        this.showModal = true;
+        this.table_name = table_name;
+        this.table_id = table_id;
+        this.canSelectNum = '这是'+ table_name + "，" + station + '，请正确选择人数，以免拥挤！'
+      }
+
     },
     messageWarningFn (text) {
       this.$Message.warning(text)
@@ -73,7 +99,7 @@ export default {
       }, 1000)
     },
     addNum(){
-      if (this.newEditedNum === '0') {
+      if (this.newEditedNum === 0) {
         this.messageWarningFn('请重新输入就餐人数！')
         return
       }
@@ -84,21 +110,17 @@ export default {
           loading: true,
           onOk: () => {
             let _this = this;
-            let num = this.newEditedNum;
+            let num = _this.newEditedNum;
             let cart = JSON.parse(sessionStorage.getItem('cartData')) || []
-            //const itemInCart = cart.find(item => item.food_id === product.food_id);
-            let index = cart.findIndex(v => v.food_id === 159)
-            // let newNum = 1;
+            let index = cart.findIndex(v => v.food_id === 46)
             if (index === -1) {
               // 如果不存在，将人数添加到购物车,并设置数量为点选数量, 线上环境food_id是159，开发环境是46
-              cart.push({food_id: 159, food_name: "小料、筷子", price: 6, num: num, isChecked: false})
+              cart.push({tableName: _this.table_name, tableId: _this.table_id, food_id: 159, food_name: "小料、筷子", price: 6, num: num, isChecked: false})
             } else {
               // 如果存在，仅设置数量为点选数量
               cart[index].num = num
             }
             sessionStorage.setItem('cartData', JSON.stringify(cart));
-            // sessionStorage.setItem('table_id', JSON.stringify(_this.table_id));
-            // _this.$emit("inputtedUserNum", num)
             _this.messageWarningFn("就餐人数定好了，快去“后台点菜”页选择菜品吧！")
             _this.$Modal.remove()
           },
@@ -135,8 +157,8 @@ export default {
 }
 
 .grid-item {
-  background-color: #d3d1d1;
-  border: 1px solid #ccc;
+  background-color: #c0c79e;
+  border: 1px solid #9a9ca1;
   display: flex;
   flex-direction: column; /* 使项目垂直排列 */
   align-items: center;
@@ -146,7 +168,7 @@ export default {
   box-sizing: border-box; /* 包括边框和内边距在内计算元素总宽度和高度 */
 }
 .active {
-  background-color: #e0fcca;
+  background-color: #acc53f;
 }
 /* 为了使方格内容不溢出，并保持良好的视觉效果，可以设置最大宽度和高度，或者根据实际需求调整 */
 .grid-item > * {
@@ -158,7 +180,7 @@ export default {
 }
 button{
   margin-top: 30px;
-  background: #78abf6; /* 背景 */
+  background: #6ea551; /* 背景 */
   border-radius: 5px;
   height: 30px;
   width: 80px;
